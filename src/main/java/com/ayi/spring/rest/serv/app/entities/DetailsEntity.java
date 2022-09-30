@@ -22,4 +22,7 @@ public class DetailsEntity {
 
     @Column(name = "accumulated_points", nullable = false)
     private Long accumulatedPoints;
+
+    @OneToOne(mappedBy = "clientDetails")
+    private ClientEntity client;
 }

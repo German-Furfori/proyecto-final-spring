@@ -23,5 +23,7 @@ public class InvoiceEntity {
     @Column(name = "total_amount", nullable = false)
     private Double totalAmount;
 
-    // Client FK
+    @ManyToOne
+    @JoinColumn(name = "client_fk", referencedColumnName = "id_client")
+    private ClientEntity client;
 }
