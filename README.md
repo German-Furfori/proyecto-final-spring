@@ -1,4 +1,4 @@
-# Proyecto Final AYI Academy
+# Final Proyect for the AYI Academy
 
-Este proyecto trata de una API REST desarrollada en Java con SpringBoot 
-utilizando MySQL como motor de bases de datos.
+This project is about a REST API developed in Java with SpringBoot, 
+using MySQL as database engine.
