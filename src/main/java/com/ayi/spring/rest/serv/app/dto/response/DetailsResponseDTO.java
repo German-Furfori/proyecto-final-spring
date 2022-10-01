@@ -27,7 +27,4 @@ public class DetailsResponseDTO {
 
     @ApiModelProperty(position = 3, notes = "Accumulated points")
     private Long accumulatedPoints;
-
-    @ApiModelProperty(position = 4, notes = "Client data")
-    private ClientResponseDTO client;
 }

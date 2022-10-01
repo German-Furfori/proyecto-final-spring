@@ -28,8 +28,4 @@ public class DetailsDTO {
     @NotNull(message = "The accumulated points cannot be null")
     @ApiModelProperty(position = 2, required = true)
     private Long accumulatedPoints;
-
-    @NotNull(message = "The client cannot be null")
-    @ApiModelProperty(position = 3, required = true)
-    private ClientDTO client;
 }
