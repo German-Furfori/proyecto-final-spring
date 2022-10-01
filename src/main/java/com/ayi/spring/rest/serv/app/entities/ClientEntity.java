@@ -45,5 +45,5 @@ public class ClientEntity {
             inverseJoinColumns = @JoinColumn(name = "address_fk"),
             uniqueConstraints = @UniqueConstraint(columnNames = {"client_fk", "address_fk"})
     )
-    List<AddressEntity> addressList;
+    private List<AddressEntity> addressList;
 }
