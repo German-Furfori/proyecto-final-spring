@@ -1,16 +1,79 @@
-INSERT INTO `persona` (`fec_nacimiento`, `fec_creacion`, `nombre`, `apellido`, `numero_documento`, `tipo_documento`) VALUES 
-('2012-10-21', '2022-09-23', 'Ramiro', 'Lopez', '40521326', 'DNI'),
-('2010-12-25', '2022-09-23', 'Silvia', 'Otaka', '25457965', 'DNI'),
-('2002-11-23', '2022-09-23', 'Juan Ignacio', 'Caballero', '36222154', 'DNI'),
-('2001-08-20', '2022-09-23', 'Juan', 'Nieto', '36548951', 'DNI'),
-('2005-12-20', '2022-09-23', 'Gimena', 'Binaghi', '35216548', 'DNI'),
-('1992-11-24', '2022-09-23', 'Fernanda', 'Balduzzi', '34521258', 'DNI'),
-('2009-04-20', '2022-09-23', 'Leonel', 'Altamirano', '39658547', 'DNI'),
-('2008-12-21', '2022-09-23', 'Nicolas', 'Clemente', '38546921', 'DNI'),
-('1995-05-16', '2022-09-23', 'Germán', 'Furfori', '39076703', 'DNI'),
-('2012-01-15', '2022-09-23', 'Rodrigo', 'Egea', '39456182', 'DNI'),
-('2009-10-08', '2022-09-23', 'Josias', 'Pazzeli', '34251888', 'DNI'),
-('1999-06-16', '2022-09-23', 'Fernando', 'Villalba', '16954785', 'DNI'),
-('2015-02-07', '2022-09-23', 'Juan José', 'Castañeda', '25699874', 'DNI');
+-- SQL Script
 
--- Modificar este script según los requerimientos del tp final --
+-- Details
+INSERT INTO `curso_ayi_final`.`details` VALUES
+    (1, 45800, 0),
+    (2, 20155, 1),
+    (3, 844, 1),
+    (4, 10090, 0),
+    (5, 900, 1),
+    (6, 49060, 0),
+    (7, 154000, 1),
+    (8, 45110, 0),
+    (9, 14600, 0),
+    (10, 37000, 0);
+
+-- Clients
+INSERT INTO `curso_ayi_final`.`clients` VALUES
+    (1, '39076703', 'Germán', 'Furfori', 1),
+    (2, '40521326', 'Juan Cruz', 'Nieto', 2),
+    (3, '25457965', 'Silvia', 'Otaka', 3),
+    (4, '36222154', 'Juan Ignacio', 'Caballero', 4),
+    (5, '35216548', 'Gimena', 'Binaghi', 5),
+    (6, '34521258', 'Fernanda', 'Balduzzi', 6),
+    (7, '39658547', 'Leonel', 'Altamirano', 7),
+    (8, '38546921', 'Nicolas', 'Clemente', 8),
+    (9, '39456182', 'Rodrigo', 'Egea', 9),
+    (10, '34251888', 'Josias', 'Pazzelli', 10);
+
+-- Invoices
+INSERT INTO `curso_ayi_final`.`invoices` VALUES
+    (1, "Cubiertas MAXXIS Crossmark rod 29 X2", 17500, 1),
+    (2, "Caja Shimano Hollowtech", 22500, 1),
+    (3, "Plato palanca Shimano Deore M4100", 19890, 1),
+    (4, "Casco Bern Lenox", 4500, 2),
+    (5, "Horquilla Cannondale Lefty", 32500, 2),
+    (6, "Bicicleta Zenith Riva Elite rod 29 1x12", 287489, 3),
+    (7, "Puños MTB Raleigh", 860, 4),
+    (8, "Cámara 29x190", 1300, 4),
+    (9, "Inflador Bulit serie 600", 7665, 5),
+    (10, "Descarrilador Shimano Tourney", 2139, 5),
+    (11, "Shifters Shimano Tourney 3x8", 8685, 5),
+    (12, "Inflador Bulit serie 600", 7665, 6),
+    (13, "Bicicleta Cannondale Trail 5", 402777, 7),
+    (14, "Manubrio MTB Zoom", 5490, 8),
+    (15, "Asiento Velo Race MTB", 8490, 10),
+    (16, "Cadena cementada c/candado BULIT", 6590, 10);
+
+-- Addresses
+INSERT INTO `curso_ayi_final`.`addresses` VALUES
+    (1, "Castelar", "Argentina", NULL, NULL, "938", "Buenos Aires", "Buenos Aires", "B1712"),
+    (2, "Ciudadela", "Argentina", 8, "B", "121", "Buenos Aires", "Padre Elizalde", "B1701"),
+    (3, "San Rafael", "Argentina", NULL, NULL, "2548", "Mendoza", "San Martín", "M5600"),
+    (4, "Alta Gracia", "Argentina", NULL, NULL, "369", "Córdoba", "Olazabal", "X5186"),
+    (5, "Castelar", "Argentina", NULL, NULL, "3095", "Buenos Aires", "Diego Araoz", "B1712"),
+    (6, "Calafate", "Argentina", NULL, NULL, "5961", "Santa Cruz", "Martín Fierro", "Z9405"),
+    (7, "Las Toscas", "Argentina", NULL, NULL, "22", "Santa Fé", "Belgrano", "15200");
+
+-- Addresses - Clients relationship table
+INSERT INTO `curso_ayi_final`.`tbl_client_address` VALUES
+    (1, 1),
+    (1, 5),
+    (2, 2),
+    (2, 3),
+    (2, 4),
+    (3, 6),
+    (3, 4),
+    (4, 2),
+    (4, 7),
+    (5, 6),
+    (5, 4),
+    (6, 1),
+    (6, 2),
+    (6, 4),
+    (7, 2),
+    (8, 6),
+    (9, 7),
+    (10, 5);
+
+

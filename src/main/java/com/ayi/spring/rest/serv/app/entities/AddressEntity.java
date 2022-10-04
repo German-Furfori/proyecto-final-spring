@@ -18,28 +18,28 @@ public class AddressEntity {
     @Column(name = "id_address")
     private Long idAddress;
 
-    @Column(name = "street_name", nullable = false)
+    @Column(name = "street_name", nullable = false, length = 50)
     private String streetName;
 
-    @Column(name = "number", nullable = false)
-    private Integer number;
+    @Column(name = "number", nullable = false, length = 5)
+    private String number;
 
-    @Column(name = "floor")
-    private Integer floor;
+    @Column(name = "floor", length = 3)
+    private String floor;
 
-    @Column(name = "floor_number")
-    private Integer floorNumber;
+    @Column(name = "floor_number", length = 2)
+    private String floorNumber;
 
-    @Column(name = "zip_code", nullable = false)
-    private Integer zipCode;
+    @Column(name = "zip_code", nullable = false, length = 6)
+    private String zipCode;
 
-    @Column(name = "city", nullable = false)
+    @Column(name = "city", nullable = false, length = 50)
     private String city;
 
-    @Column(name = "province", nullable = false)
+    @Column(name = "province", nullable = false, length = 50)
     private String province;
 
-    @Column(name = "country", nullable = false)
+    @Column(name = "country", nullable = false, length = 50)
     private String country;
 
     @ManyToMany(mappedBy = "addressList")

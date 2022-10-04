@@ -1,5 +1,6 @@
 package com.ayi.spring.rest.serv.app.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -27,4 +28,9 @@ public class DetailsResponseDTO {
 
     @ApiModelProperty(position = 3, notes = "Accumulated points")
     private Long accumulatedPoints;
+
+    @ApiModelProperty(position = 3, notes = "The client")
+    @JsonIgnoreProperties(value = "clientDetails")
+    private ClientResponseDTO client;
+
 }

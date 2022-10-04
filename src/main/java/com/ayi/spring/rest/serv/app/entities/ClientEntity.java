@@ -1,5 +1,6 @@
 package com.ayi.spring.rest.serv.app.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,7 +24,7 @@ public class ClientEntity {
     private Long idClient;
 
     @Column(name = "dni", nullable = false, length = 8)
-    private Integer dni;
+    private String dni;
 
     @Column(name = "first_name", nullable = false, length = 50)
     private String firstName;
@@ -35,7 +36,7 @@ public class ClientEntity {
     @JoinColumn(name = "details_fk", referencedColumnName = "id_details")
     private DetailsEntity clientDetails;
 
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL) // Lo mapea el atributo client de la clase InvoiceEntity
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     private List<InvoiceEntity> invoiceList;
 
     @ManyToMany(cascade = CascadeType.ALL)

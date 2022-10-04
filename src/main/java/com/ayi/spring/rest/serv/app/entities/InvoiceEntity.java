@@ -1,5 +1,6 @@
 package com.ayi.spring.rest.serv.app.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
@@ -17,7 +18,7 @@ public class InvoiceEntity {
     @Column(name = "id_invoice")
     private Long idInvoice;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = false, length = 150)
     private String description;
 
     @Column(name = "total_amount", nullable = false)

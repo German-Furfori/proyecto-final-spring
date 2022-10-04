@@ -5,7 +5,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_DATABASE}?currentSchema=${DB_SCHEMA}
+    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_DATABASE}?createDatabaseIfNotExist=true
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
   jpa:
@@ -14,7 +14,12 @@ spring:
         show_sql: true
         format_sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create # update
+    defer-datasource-initialization: 'true'
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:script.sql
 
 # Swagger settings.
 springfox:

@@ -1,5 +1,6 @@
 package com.ayi.spring.rest.serv.app.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -21,22 +22,22 @@ import java.util.List;
 public class AddressResponseDTO {
 
     @ApiModelProperty(position = 1, notes = "Address id")
-    private long idAddress;
+    private Long idAddress;
 
     @ApiModelProperty(position = 2, notes = "Street name")
     private String streetName;
 
     @ApiModelProperty(position = 3, notes = "Street number")
-    private Integer number;
+    private String number;
 
     @ApiModelProperty(position = 4, notes = "Floor number")
-    private Integer floor;
+    private String floor;
 
     @ApiModelProperty(position = 5, notes = "Number of the apartment")
-    private Integer floorNumber;
+    private String floorNumber;
 
     @ApiModelProperty(position = 6, notes = "ZIP code")
-    private Integer zipCode;
+    private String zipCode;
 
     @ApiModelProperty(position = 7, notes = "City name")
     private String city;
@@ -48,5 +49,6 @@ public class AddressResponseDTO {
     private String country;
 
     @ApiModelProperty(position = 10, notes = "Client data list")
+    @JsonIgnoreProperties(value = "addressList")
     private List<ClientResponseDTO> clientList;
 }

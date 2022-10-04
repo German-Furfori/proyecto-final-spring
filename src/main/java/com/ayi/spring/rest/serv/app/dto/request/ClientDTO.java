@@ -23,7 +23,7 @@ public class ClientDTO {
 
     @NotNull(message = "DNI cannot be null")
     @ApiModelProperty(position = 1, required = true)
-    private Integer dni;
+    private String dni;
 
     @NotNull(message = "First name cannot be null")
     @ApiModelProperty(position = 2, required = true)

@@ -1,5 +1,6 @@
 package com.ayi.spring.rest.serv.app.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -29,5 +30,6 @@ public class InvoiceResponseDTO {
     private Double totalAmount;
 
     @ApiModelProperty(position = 4, notes = "Client data")
+    @JsonIgnoreProperties(value = "invoiceList")
     private ClientResponseDTO client;
 }

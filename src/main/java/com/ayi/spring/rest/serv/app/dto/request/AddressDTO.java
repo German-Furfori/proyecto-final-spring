@@ -27,17 +27,17 @@ public class AddressDTO {
 
     @NotNull(message = "Street's number cannot be null")
     @ApiModelProperty(position = 2, required = true)
-    private Integer number;
+    private String number;
 
     @ApiModelProperty(position = 3)
-    private Integer floor;
+    private String floor;
 
     @ApiModelProperty(position = 4)
-    private Integer floorNumber;
+    private String floorNumber;
 
     @NotNull(message = "ZIP code cannot be null")
     @ApiModelProperty(position = 5, required = true)
-    private Integer zipCode;
+    private String zipCode;
 
     @NotNull(message = "City's name cannot be null")
     @ApiModelProperty(position = 6, required = true)

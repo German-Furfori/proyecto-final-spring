@@ -1,5 +1,6 @@
 package com.ayi.spring.rest.serv.app.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -24,7 +25,7 @@ public class ClientResponseDTO {
     private Long clientId;
 
     @ApiModelProperty(position = 2, notes = "Client DNI")
-    private Integer dni;
+    private String dni;
 
     @ApiModelProperty(position = 3, notes = "Client first name")
     private String firstName;
@@ -33,11 +34,14 @@ public class ClientResponseDTO {
     private String lastName;
 
     @ApiModelProperty(position = 5, notes = "Client account details")
+    @JsonIgnoreProperties(value = "client") // To avoid infinite loop in the bidirectional relationship
     private DetailsResponseDTO clientDetails;
 
     @ApiModelProperty(position = 6, notes = "Client invoices list")
+    @JsonIgnoreProperties(value = "client")
     private List<InvoiceResponseDTO> invoiceList;
 
     @ApiModelProperty(position = 7, notes = "Client addresses list")
+    @JsonIgnoreProperties(value = "clientList")
     private List<AddressResponseDTO> addressList;
 }

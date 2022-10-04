@@ -1,5 +1,6 @@
 package com.ayi.spring.rest.serv.app.controllers;
 
+import com.ayi.spring.rest.serv.app.dto.request.ClientDTO;
 import com.ayi.spring.rest.serv.app.dto.response.ClientResponseDTO;
 import com.ayi.spring.rest.serv.app.exceptions.ReadAccessException;
 import com.ayi.spring.rest.serv.app.services.IClientService;
@@ -13,12 +14,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @AllArgsConstructor
@@ -28,6 +27,41 @@ import java.util.Map;
 @RestController
 public class ClientController {
     private IClientService clientService;
+
+    @GetMapping(
+            value = "/getAllClients",
+            produces = {MediaType.APPLICATION_JSON_VALUE}
+    )
+    @ApiOperation(
+            value = "Retrieves data associated to all the clients",
+            httpMethod = "GET",
+            response = ClientResponseDTO.class
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    code = 200,
+                    message = "Body content with the clients information"
+            ),
+            @ApiResponse(
+                    code = 400,
+                    message = "Describes errors on invalid payload received")
+    })
+    public ResponseEntity<?> getAllClients() {
+
+        Map<String, Object> response = new HashMap<>();
+
+        List<ClientResponseDTO> clientResponseDTOList;
+
+        try {
+            clientResponseDTOList = clientService.findAllClients();
+        } catch (ReadAccessException e) {
+            response.put("Código de error: ", 1001);
+            response.put("Mensaje de error: ", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+
+        return ResponseEntity.ok(clientResponseDTOList);
+    }
 
     @GetMapping(
             value = "/getClientById/{id}",
@@ -64,5 +98,25 @@ public class ClientController {
         }
 
         return ResponseEntity.ok(clientResponseDTO);
+    }
+
+    @PostMapping(value = "/addPerson")
+    @ApiOperation(
+            value = "Adds a client to the DB table",
+            httpMethod = "POST",
+            response = ClientResponseDTO.class
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    code = 200,
+                    message = "Body content with the new client"
+            ),
+            @ApiResponse(
+                    code = 400,
+                    message = "Describes errors on invalid payload received"
+            )
+    })
+    public ResponseEntity<ClientResponseDTO> createClient(@RequestBody ClientDTO clientDTO) {
+        return ResponseEntity.ok(clientService.addClient(clientDTO));
     }
 }
