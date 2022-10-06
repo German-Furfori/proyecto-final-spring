@@ -20,11 +20,12 @@ import java.util.List;
 @Transactional
 @AllArgsConstructor
 public class DetailsServiceImpl implements IDetailsService {
-    @Autowired
-    IDetailsRepository detailsRepository;
 
     @Autowired
-    IDetailsMapper detailsMapper;
+    private IDetailsRepository detailsRepository;
+
+    @Autowired
+    private IDetailsMapper detailsMapper;
 
     @Override
     public List<DetailsResponseDTO> findAllDetails() throws ReadAccessException {
@@ -50,4 +51,5 @@ public class DetailsServiceImpl implements IDetailsService {
     public AddressResponseDTO modifyAddress(Long id, DetailsDTO detailsDTO) throws WriteAccessException {
         return null;
     }
+
 }

@@ -41,12 +41,12 @@ public class ClientServiceImpl implements IClientService {
 
         utils.verifyClientDni(clientFullDTO.getDni());
 
-        ClientEntity entity = clientMapper.fullDtoToEntity(clientFullDTO); // Corregir, no está guardando la FK en el registro de la dirección
-        entity.setIsActive(true);
+        ClientEntity clientEntity = clientMapper.fullDtoToEntity(clientFullDTO); // Corregir, no está guardando la FK en el registro de la dirección
+        clientEntity.setIsActive(true);
 
-        clientRepository.save(entity);
+        clientRepository.save(clientEntity);
 
-        return clientMapper.entityToFullDto(entity);
+        return clientMapper.entityToFullDto(clientEntity);
 
     }
 

@@ -16,10 +16,10 @@ import javax.validation.constraints.NotNull;
 @Setter
 @ToString
 @ApiModel(
-        value = "Invoice Request",
+        value = "Invoice Request without client",
         description = "Data needed to create the invoice"
 )
-public class InvoiceDTO {
+public class InvoiceWithoutClientDTO {
 
     @NotNull(message = "The description cannot be null")
     @ApiModelProperty(position = 1, required = true)
@@ -29,7 +29,4 @@ public class InvoiceDTO {
     @ApiModelProperty(position = 2, required = true)
     private Double totalAmount;
 
-    @NotNull(message = "The client cannot be null")
-    @ApiModelProperty(position = 3, required = true)
-    private ClientFullDTO client;
 }

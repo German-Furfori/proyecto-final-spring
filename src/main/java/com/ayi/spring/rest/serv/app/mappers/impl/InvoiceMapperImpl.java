@@ -1,6 +1,7 @@
 package com.ayi.spring.rest.serv.app.mappers.impl;
 
-import com.ayi.spring.rest.serv.app.dto.request.InvoiceDTO;
+import com.ayi.spring.rest.serv.app.dto.request.InvoiceWithClientDTO;
+import com.ayi.spring.rest.serv.app.dto.request.InvoiceWithoutClientDTO;
 import com.ayi.spring.rest.serv.app.dto.response.InvoiceResponseDTO;
 import com.ayi.spring.rest.serv.app.entities.InvoiceEntity;
 import com.ayi.spring.rest.serv.app.mappers.IInvoiceMapper;
@@ -21,14 +22,21 @@ public class InvoiceMapperImpl implements IInvoiceMapper {
     }
 
     @Override
-    public InvoiceEntity dtoToEntity(InvoiceDTO dto) {
+    public InvoiceEntity dtoWithToEntity(InvoiceWithClientDTO dto) {
         InvoiceEntity invoiceEntity = new InvoiceEntity();
         modelMapper.map(dto, invoiceEntity);
         return invoiceEntity;
     }
 
     @Override
-    public InvoiceEntity toEntityByRequest(InvoiceDTO dto) {
+    public InvoiceEntity dtoWithoutToEntity(InvoiceWithoutClientDTO dto) {
+        InvoiceEntity invoiceEntity = new InvoiceEntity();
+        modelMapper.map(dto, invoiceEntity);
+        return invoiceEntity;
+    }
+
+    @Override
+    public InvoiceEntity toEntityByRequest(InvoiceWithClientDTO dto) {
         InvoiceEntity invoiceEntity = new InvoiceEntity();
         modelMapper.map(dto, invoiceEntity);
         return invoiceEntity;
