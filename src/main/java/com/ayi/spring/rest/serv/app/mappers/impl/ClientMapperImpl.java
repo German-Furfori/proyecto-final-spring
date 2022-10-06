@@ -1,6 +1,7 @@
 package com.ayi.spring.rest.serv.app.mappers.impl;
 
-import com.ayi.spring.rest.serv.app.dto.request.ClientDTO;
+import com.ayi.spring.rest.serv.app.dto.request.ClientFullDTO;
+import com.ayi.spring.rest.serv.app.dto.request.ClientOnlyDTO;
 import com.ayi.spring.rest.serv.app.dto.response.ClientResponseDTO;
 import com.ayi.spring.rest.serv.app.entities.ClientEntity;
 import com.ayi.spring.rest.serv.app.mappers.IClientMapper;
@@ -21,14 +22,21 @@ public class ClientMapperImpl implements IClientMapper {
     }
 
     @Override
-    public ClientEntity dtoToEntity(ClientDTO dto) {
+    public ClientEntity dtoToEntity(ClientOnlyDTO dto) {
         ClientEntity clientEntity = new ClientEntity();
         modelMapper.map(dto, clientEntity);
         return clientEntity;
     }
 
     @Override
-    public ClientEntity toEntityByRequest(ClientDTO dto) {
+    public ClientEntity fullDtoToEntity(ClientFullDTO dto) {
+        ClientEntity clientEntity = new ClientEntity();
+        modelMapper.map(dto, clientEntity);
+        return clientEntity;
+    }
+
+    @Override
+    public ClientEntity toEntityByRequest(ClientOnlyDTO dto) {
         ClientEntity clientEntity = new ClientEntity();
         modelMapper.map(dto, clientEntity);
         return clientEntity;

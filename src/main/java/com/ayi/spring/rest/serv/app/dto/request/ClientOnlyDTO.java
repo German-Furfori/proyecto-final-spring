@@ -17,9 +17,9 @@ import java.util.List;
 @ToString
 @ApiModel(
         value = "Client Request",
-        description = "Data needed to create the clients"
+        description = "Data needed to update the clients"
 )
-public class ClientDTO {
+public class ClientOnlyDTO {
 
     @NotNull(message = "DNI cannot be null")
     @ApiModelProperty(position = 1, required = true)
@@ -33,17 +33,10 @@ public class ClientDTO {
     @ApiModelProperty(position = 3, required = true)
     private String lastName;
 
-    @NotNull(message = "Client details cannot be null")
+    @NotNull(message = "Determines if the client is active or not")
     @ApiModelProperty(position = 4, required = true)
-    private DetailsDTO clientDetails;
+    private Boolean isActive;
 
-    @NotNull(message = "Client invoices cannot be null")
-    @ApiModelProperty(position = 5, required = true)
-    private List<InvoiceDTO> invoiceList;
-
-    @NotNull(message = "Client addresses cannot be null")
-    @ApiModelProperty(position = 6, required = true)
-    private List<AddressDTO> addressList;
 }
 
 

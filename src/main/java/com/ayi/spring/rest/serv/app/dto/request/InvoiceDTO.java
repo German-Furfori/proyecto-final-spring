@@ -31,5 +31,5 @@ public class InvoiceDTO {
 
     @NotNull(message = "The client cannot be null")
     @ApiModelProperty(position = 3, required = true)
-    private ClientDTO client;
+    private ClientOnlyDTO client;
 }

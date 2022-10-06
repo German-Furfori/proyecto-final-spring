@@ -14,7 +14,7 @@ INSERT INTO `curso_ayi_final`.`details` VALUES
     (10, 37000, 0);
 
 -- Clients
-INSERT INTO `curso_ayi_final`.`clients` VALUES
+INSERT INTO `curso_ayi_final`.`clients` (`id_client`, `dni`, `first_name`, `last_name`, `details_fk`) VALUES -- is_active attribute is "true" by default
     (1, '39076703', 'Germán', 'Furfori', 1),
     (2, '40521326', 'Juan Cruz', 'Nieto', 2),
     (3, '25457965', 'Silvia', 'Otaka', 3),
@@ -47,33 +47,17 @@ INSERT INTO `curso_ayi_final`.`invoices` VALUES
 
 -- Addresses
 INSERT INTO `curso_ayi_final`.`addresses` VALUES
-    (1, "Castelar", "Argentina", NULL, NULL, "938", "Buenos Aires", "Buenos Aires", "B1712"),
-    (2, "Ciudadela", "Argentina", 8, "B", "121", "Buenos Aires", "Padre Elizalde", "B1701"),
-    (3, "San Rafael", "Argentina", NULL, NULL, "2548", "Mendoza", "San Martín", "M5600"),
-    (4, "Alta Gracia", "Argentina", NULL, NULL, "369", "Córdoba", "Olazabal", "X5186"),
-    (5, "Castelar", "Argentina", NULL, NULL, "3095", "Buenos Aires", "Diego Araoz", "B1712"),
-    (6, "Calafate", "Argentina", NULL, NULL, "5961", "Santa Cruz", "Martín Fierro", "Z9405"),
-    (7, "Las Toscas", "Argentina", NULL, NULL, "22", "Santa Fé", "Belgrano", "15200");
-
--- Addresses - Clients relationship table
-INSERT INTO `curso_ayi_final`.`tbl_client_address` VALUES
-    (1, 1),
-    (1, 5),
-    (2, 2),
-    (2, 3),
-    (2, 4),
-    (3, 6),
-    (3, 4),
-    (4, 2),
-    (4, 7),
-    (5, 6),
-    (5, 4),
-    (6, 1),
-    (6, 2),
-    (6, 4),
-    (7, 2),
-    (8, 6),
-    (9, 7),
-    (10, 5);
-
-
+    (1, "Castelar", "Argentina", NULL, NULL, "938", "Buenos Aires", "Buenos Aires", "B1712", 1),
+    (2, "Castelar", "Argentina", NULL, NULL, "3095", "Buenos Aires", "Diego Araoz", "B1712", 1),
+    (3, "Ciudadela", "Argentina", 8, "B", "121", "Buenos Aires", "Padre Elizalde", "B1701", 2),
+    (4, "Rosario", "Argentina", NULL, NULL, "125", "Santa Fé", "Zapiola", "S2000", 3),
+    (5, "Rosario", "Argentina", NULL, NULL, "8845", "Santa Fé", "Manuel Prudan", "S2001", 3),
+    (6, "San Rafael", "Argentina", NULL, NULL, "2548", "Mendoza", "San Martín", "M5600", 4),
+    (7, "Mendoza", "Argentina", NULL, NULL, "548", "Mendoza", "Ocampo", "M5500", 4),
+    (8, "Las Toscas", "Argentina", NULL, NULL, "22", "Santa Fé", "Belgrano", "15200", 5),
+    (9, "Córdoba Capital", "Argentina", NULL, NULL, "8541", "Córdoba", "Av. Libertador", "B5000", 6),
+    (10, "Córdoba Capital", "Argentina", NULL, NULL, "552", "Córdoba", "Etchegaray", "B5002", 6),
+    (11, "Alta Gracia", "Argentina", NULL, NULL, "369", "Córdoba", "Olazabal", "X5186", 7),
+    (12, "Paraná", "Argentina", 5, "A", "226", "Entre Ríos", "Juncal", "E3100", 8),
+    (13, "Calafate", "Argentina", NULL, NULL, "5961", "Santa Cruz", "Martín Fierro", "Z9405", 9),
+    (14, "Puerto Pirámides", "Argentina", NULL, NULL, "778", "Chubut", "1006", "U9121", 10);

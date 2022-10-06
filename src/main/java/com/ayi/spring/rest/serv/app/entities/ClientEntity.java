@@ -32,6 +32,9 @@ public class ClientEntity {
     @Column(name = "last_name", nullable = false, length = 50)
     private String lastName;
 
+    @Column(name = "is_active", nullable = false, columnDefinition = "boolean default true")
+    private Boolean isActive;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "details_fk", referencedColumnName = "id_details")
     private DetailsEntity clientDetails;
@@ -39,12 +42,6 @@ public class ClientEntity {
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     private List<InvoiceEntity> invoiceList;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "tbl_client_address",
-            joinColumns = @JoinColumn(name="client_fk"),
-            inverseJoinColumns = @JoinColumn(name = "address_fk"),
-            uniqueConstraints = @UniqueConstraint(columnNames = {"client_fk", "address_fk"})
-    )
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     private List<AddressEntity> addressList;
 }

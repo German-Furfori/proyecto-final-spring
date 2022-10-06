@@ -1,9 +1,13 @@
 package com.ayi.spring.rest.serv.app.services.impl;
 
-import com.ayi.spring.rest.serv.app.dto.request.ClientDTO;
+import ch.qos.logback.core.net.server.Client;
+import com.ayi.spring.rest.serv.app.dto.request.ClientFullDTO;
+import com.ayi.spring.rest.serv.app.dto.request.ClientOnlyDTO;
+import com.ayi.spring.rest.serv.app.dto.response.ClientInvoicesResponseDTO;
 import com.ayi.spring.rest.serv.app.dto.response.ClientResponseDTO;
 import com.ayi.spring.rest.serv.app.entities.ClientEntity;
 import com.ayi.spring.rest.serv.app.exceptions.ReadAccessException;
+import com.ayi.spring.rest.serv.app.exceptions.WriteAccessException;
 import com.ayi.spring.rest.serv.app.mappers.IClientMapper;
 import com.ayi.spring.rest.serv.app.repositories.IClientRepository;
 import com.ayi.spring.rest.serv.app.services.IClientService;
@@ -15,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static com.ayi.spring.rest.serv.app.constants.ExceptionStrings.*;
 
 @Service
 @Slf4j
@@ -29,12 +35,26 @@ public class ClientServiceImpl implements IClientService {
     private IClientMapper clientMapper;
 
     @Override
+    public ClientResponseDTO addClient(ClientFullDTO clientFullDTO) throws WriteAccessException {
+
+        verifyDni(clientFullDTO.getDni());
+
+        ClientEntity entity = clientMapper.fullDtoToEntity(clientFullDTO); // Corregir, no está guardando la FK en el registro de la dirección
+
+        clientRepository.save(entity);
+
+        return clientMapper.entityToDto(entity);
+
+    }
+
+    @Override
     public List<ClientResponseDTO> findAllClients() throws ReadAccessException {
+
         List<ClientResponseDTO> clientResponseDTOList = new ArrayList<>();
         List<ClientEntity> clientEntityList = clientRepository.findAll();
 
         if(clientEntityList == null) {
-            throw new ReadAccessException("No existen registros en el sistema");
+            throw new ReadAccessException(READ_ACCESS_EXCEPTION_NOT_FOUND);
         }
 
         clientEntityList.forEach(client -> {
@@ -43,39 +63,96 @@ public class ClientServiceImpl implements IClientService {
         });
 
         return clientResponseDTOList;
+
     }
 
     @Override
     public ClientResponseDTO findClientById(Long idClient) throws ReadAccessException {
+
+        verifyId(idClient);
+
+        ClientEntity clientEntity = clientRepository.findById(idClient).get();
+
+        return clientMapper.entityToDto(clientEntity);
+
+    }
+
+    @Override
+    public ClientInvoicesResponseDTO findClientInvoices(Long idClient) throws ReadAccessException {
+
+        verifyId(idClient);
+
+        ClientEntity clientEntity = clientRepository.findById(idClient).get();
+        ClientResponseDTO clientResponseDTO = clientMapper.entityToDto(clientEntity);
+
+        ClientInvoicesResponseDTO clientInvoicesResponseDTO = new ClientInvoicesResponseDTO(
+                idClient,
+                clientResponseDTO.getInvoiceList()
+        );
+
+        return clientInvoicesResponseDTO;
+
+    }
+
+    @Override
+    public ClientResponseDTO modifyClientById(Long idClient, ClientOnlyDTO clientOnlyDTO) throws ReadAccessException {
+
+        verifyId(idClient);
+        verifyDni(clientOnlyDTO.getDni());
+
+        ClientEntity clientEntity = clientRepository.findById(idClient).get();
+
+        clientEntity.setDni(clientOnlyDTO.getDni());
+        clientEntity.setFirstName(clientOnlyDTO.getFirstName());
+        clientEntity.setLastName(clientOnlyDTO.getLastName());
+
+        clientRepository.save(clientEntity);
+
+        return clientMapper.entityToDto(clientEntity);
+
+    }
+
+    @Override
+    public ClientResponseDTO removeClient(Long idClient) throws ReadAccessException {
+
+        verifyId(idClient);
+
+        ClientEntity clientEntity = clientRepository.findById(idClient).get();
+
+        clientEntity.setIsActive(false);
+        clientRepository.save(clientEntity);
+        ClientResponseDTO clientResponseDTO = clientMapper.entityToDto(clientEntity);
+
+        return clientResponseDTO;
+    }
+
+    /**
+     *
+     * Function to verify the integrity or existence of the ID provided
+     *
+     * */
+    public void verifyId(Long idClient) throws ReadAccessException {
         if(idClient == null || idClient <= 0) {
-            throw new ReadAccessException("Error, el valor del id es incorrecto");
+            throw new ReadAccessException(READ_ACCESS_EXCEPTION_INCORRECT_INPUT);
         }
 
         Optional<ClientEntity> entity = clientRepository.findById(idClient);
 
         if(!entity.isPresent()) {
-            throw new ReadAccessException("No se encuentra el id solicitado");
+            throw new ReadAccessException(READ_ACCESS_EXCEPTION_ID_NOT_FOUND);
         }
-
-        return clientMapper.entityToDto(entity.get());
     }
 
-    @Override
-    public ClientResponseDTO addClient(ClientDTO clientDTO) {
-        ClientEntity entity = clientMapper.dtoToEntity(clientDTO);
+    /**
+     *
+     * Function to verify existence of the DNI provided
+     *
+     * */
+    public void verifyDni(String dni) throws WriteAccessException {
+        Optional<ClientEntity> clientOptional = clientRepository.findByDni(dni);
 
-        clientRepository.save(entity);
-
-        return clientMapper.entityToDto(entity);
-    }
-
-    @Override
-    public ClientResponseDTO removeClient(ClientDTO clientDTO) {
-        return null;
-    }
-
-    @Override
-    public ClientResponseDTO modifyClient(ClientDTO clientDTO) {
-        return null;
+        if(clientOptional.isPresent()) {
+            throw new WriteAccessException(WRITE_ACCESS_EXCEPTION_DNI);
+        }
     }
 }

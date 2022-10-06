@@ -7,8 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -51,7 +52,8 @@ public class AddressDTO {
     @ApiModelProperty(position = 8, required = true)
     private String country;
 
-    @NotNull(message = "The clients cannot be null")
-    @ApiModelProperty(position = 9, required = true)
-    private List<ClientDTO> clientList;
+    @NotNull(message = "The client cannot be null")
+    @ApiModelProperty(hidden = true)
+    private ClientOnlyDTO client;
+
 }
