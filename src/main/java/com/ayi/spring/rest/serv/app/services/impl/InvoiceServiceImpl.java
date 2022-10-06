@@ -2,6 +2,7 @@ package com.ayi.spring.rest.serv.app.services.impl;
 
 import com.ayi.spring.rest.serv.app.dto.request.InvoiceDTO;
 import com.ayi.spring.rest.serv.app.dto.response.InvoiceResponseDTO;
+import com.ayi.spring.rest.serv.app.entities.ClientEntity;
 import com.ayi.spring.rest.serv.app.exceptions.ReadAccessException;
 import com.ayi.spring.rest.serv.app.exceptions.WriteAccessException;
 import com.ayi.spring.rest.serv.app.mappers.IInvoiceMapper;
@@ -27,7 +28,9 @@ public class InvoiceServiceImpl implements IInvoiceService {
 
     @Override
     public InvoiceResponseDTO addInvoiceWithClient(Long idClient, InvoiceDTO invoiceDTO) throws WriteAccessException {
+
         return null;
+
     }
 
     @Override
