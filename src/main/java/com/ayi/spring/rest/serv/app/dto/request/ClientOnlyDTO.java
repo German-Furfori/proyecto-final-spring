@@ -33,10 +33,6 @@ public class ClientOnlyDTO {
     @ApiModelProperty(position = 3, required = true)
     private String lastName;
 
-    @NotNull(message = "Determines if the client is active or not")
-    @ApiModelProperty(position = 4, required = true)
-    private Boolean isActive;
-
 }
 
 

@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -50,5 +49,5 @@ public class AddressResponseDTO {
 
     @ApiModelProperty(position = 10, notes = "Client data list")
     @JsonIgnoreProperties(value = "addressList")
-    private ClientResponseDTO client;
+    private ClientFullResponseDTO client;
 }

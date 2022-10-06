@@ -1,10 +1,10 @@
 package com.ayi.spring.rest.serv.app.services.impl;
 
-import ch.qos.logback.core.net.server.Client;
 import com.ayi.spring.rest.serv.app.dto.request.ClientFullDTO;
 import com.ayi.spring.rest.serv.app.dto.request.ClientOnlyDTO;
 import com.ayi.spring.rest.serv.app.dto.response.ClientInvoicesResponseDTO;
-import com.ayi.spring.rest.serv.app.dto.response.ClientResponseDTO;
+import com.ayi.spring.rest.serv.app.dto.response.ClientFullResponseDTO;
+import com.ayi.spring.rest.serv.app.dto.response.ClientOnlyResponseDTO;
 import com.ayi.spring.rest.serv.app.entities.ClientEntity;
 import com.ayi.spring.rest.serv.app.exceptions.ReadAccessException;
 import com.ayi.spring.rest.serv.app.exceptions.WriteAccessException;
@@ -35,22 +35,23 @@ public class ClientServiceImpl implements IClientService {
     private IClientMapper clientMapper;
 
     @Override
-    public ClientResponseDTO addClient(ClientFullDTO clientFullDTO) throws WriteAccessException {
+    public ClientFullResponseDTO addClient(ClientFullDTO clientFullDTO) throws WriteAccessException {
 
         verifyDni(clientFullDTO.getDni());
 
         ClientEntity entity = clientMapper.fullDtoToEntity(clientFullDTO); // Corregir, no está guardando la FK en el registro de la dirección
+        entity.setIsActive(true);
 
         clientRepository.save(entity);
 
-        return clientMapper.entityToDto(entity);
+        return clientMapper.entityToFullDto(entity);
 
     }
 
     @Override
-    public List<ClientResponseDTO> findAllClients() throws ReadAccessException {
+    public List<ClientFullResponseDTO> findAllClients() throws ReadAccessException {
 
-        List<ClientResponseDTO> clientResponseDTOList = new ArrayList<>();
+        List<ClientFullResponseDTO> clientFullResponseDTOList = new ArrayList<>();
         List<ClientEntity> clientEntityList = clientRepository.findAll();
 
         if(clientEntityList == null) {
@@ -58,22 +59,22 @@ public class ClientServiceImpl implements IClientService {
         }
 
         clientEntityList.forEach(client -> {
-            ClientResponseDTO clientResponseDTO = clientMapper.entityToDto(client);
-            clientResponseDTOList.add(clientResponseDTO);
+            ClientFullResponseDTO clientFullResponseDTO = clientMapper.entityToFullDto(client);
+            clientFullResponseDTOList.add(clientFullResponseDTO);
         });
 
-        return clientResponseDTOList;
+        return clientFullResponseDTOList;
 
     }
 
     @Override
-    public ClientResponseDTO findClientById(Long idClient) throws ReadAccessException {
+    public ClientFullResponseDTO findClientById(Long idClient) throws ReadAccessException {
 
         verifyId(idClient);
 
         ClientEntity clientEntity = clientRepository.findById(idClient).get();
 
-        return clientMapper.entityToDto(clientEntity);
+        return clientMapper.entityToFullDto(clientEntity);
 
     }
 
@@ -83,11 +84,11 @@ public class ClientServiceImpl implements IClientService {
         verifyId(idClient);
 
         ClientEntity clientEntity = clientRepository.findById(idClient).get();
-        ClientResponseDTO clientResponseDTO = clientMapper.entityToDto(clientEntity);
+        ClientFullResponseDTO clientFullResponseDTO = clientMapper.entityToFullDto(clientEntity);
 
         ClientInvoicesResponseDTO clientInvoicesResponseDTO = new ClientInvoicesResponseDTO(
                 idClient,
-                clientResponseDTO.getInvoiceList()
+                clientFullResponseDTO.getInvoiceList()
         );
 
         return clientInvoicesResponseDTO;
@@ -95,7 +96,7 @@ public class ClientServiceImpl implements IClientService {
     }
 
     @Override
-    public ClientResponseDTO modifyClient(Long idClient, ClientOnlyDTO clientOnlyDTO) throws ReadAccessException {
+    public ClientOnlyResponseDTO modifyClient(Long idClient, ClientOnlyDTO clientOnlyDTO) throws ReadAccessException {
 
         verifyId(idClient);
         verifyDni(clientOnlyDTO.getDni());
@@ -108,12 +109,12 @@ public class ClientServiceImpl implements IClientService {
 
         clientRepository.save(clientEntity);
 
-        return clientMapper.entityToDto(clientEntity);
+        return clientMapper.entityToOnlyDto(clientEntity);
 
     }
 
     @Override
-    public ClientResponseDTO removeClient(Long idClient) throws ReadAccessException {
+    public ClientFullResponseDTO removeClient(Long idClient) throws ReadAccessException {
 
         verifyId(idClient);
 
@@ -121,9 +122,9 @@ public class ClientServiceImpl implements IClientService {
 
         clientEntity.setIsActive(false);
         clientRepository.save(clientEntity);
-        ClientResponseDTO clientResponseDTO = clientMapper.entityToDto(clientEntity);
+        ClientFullResponseDTO clientFullResponseDTO = clientMapper.entityToFullDto(clientEntity);
 
-        return clientResponseDTO;
+        return clientFullResponseDTO;
     }
 
     /**

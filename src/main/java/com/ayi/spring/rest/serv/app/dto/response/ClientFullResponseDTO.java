@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @AllArgsConstructor
@@ -19,9 +18,9 @@ import java.util.List;
 @ToString
 @ApiModel(
         value = "Client Response",
-        description = "The client data provided by the server"
+        description = "The full client data provided by the server"
 )
-public class ClientResponseDTO {
+public class ClientFullResponseDTO {
 
     @ApiModelProperty(position = 1, notes = "Client id")
     private Long clientId;

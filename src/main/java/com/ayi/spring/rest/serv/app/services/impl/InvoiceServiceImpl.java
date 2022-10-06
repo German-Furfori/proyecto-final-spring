@@ -26,6 +26,16 @@ public class InvoiceServiceImpl implements IInvoiceService {
     IInvoiceMapper invoiceMapper;
 
     @Override
+    public InvoiceResponseDTO addInvoiceWithClient(Long idClient, InvoiceDTO invoiceDTO) throws WriteAccessException {
+        return null;
+    }
+
+    @Override
+    public InvoiceResponseDTO addInvoiceWithoutClient(InvoiceDTO invoiceDTO) throws WriteAccessException {
+        return null;
+    }
+
+    @Override
     public List<InvoiceResponseDTO> findAllInvoices() throws ReadAccessException {
         return null;
     }
@@ -35,18 +45,9 @@ public class InvoiceServiceImpl implements IInvoiceService {
         return null;
     }
 
-    @Override
-    public InvoiceResponseDTO addInvoice(InvoiceDTO invoiceDTO) throws WriteAccessException {
-        return null;
-    }
 
     @Override
     public InvoiceResponseDTO removeInvoiceById(Long id) throws WriteAccessException {
-        return null;
-    }
-
-    @Override
-    public InvoiceResponseDTO modifyInvoice(Long id, InvoiceDTO invoiceDTO) throws WriteAccessException {
         return null;
     }
 }

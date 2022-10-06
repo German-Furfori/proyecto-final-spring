@@ -31,6 +31,6 @@ public class DetailsResponseDTO {
 
     @ApiModelProperty(position = 3, notes = "The client")
     @JsonIgnoreProperties(value = "clientDetails")
-    private ClientResponseDTO client;
+    private ClientFullResponseDTO client;
 
 }

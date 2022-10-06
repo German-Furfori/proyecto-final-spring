@@ -8,13 +8,13 @@ import com.ayi.spring.rest.serv.app.exceptions.WriteAccessException;
 import java.util.List;
 
 public interface IInvoiceService {
+    InvoiceResponseDTO addInvoiceWithClient(Long idClient, InvoiceDTO invoiceDTO) throws WriteAccessException;
+
+    InvoiceResponseDTO addInvoiceWithoutClient(InvoiceDTO invoiceDTO) throws WriteAccessException;
+
     List<InvoiceResponseDTO> findAllInvoices() throws ReadAccessException;
 
     InvoiceResponseDTO findInvoiceById(Long id) throws ReadAccessException;
 
-    InvoiceResponseDTO addInvoice(InvoiceDTO invoiceDTO) throws WriteAccessException;
-
     InvoiceResponseDTO removeInvoiceById(Long id) throws WriteAccessException;
-
-    InvoiceResponseDTO modifyInvoice(Long id, InvoiceDTO invoiceDTO) throws WriteAccessException;
 }

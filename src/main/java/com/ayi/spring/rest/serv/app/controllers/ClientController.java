@@ -1,10 +1,10 @@
 package com.ayi.spring.rest.serv.app.controllers;
 
-import com.ayi.spring.rest.serv.app.dto.request.AddressDTO;
 import com.ayi.spring.rest.serv.app.dto.request.ClientFullDTO;
 import com.ayi.spring.rest.serv.app.dto.request.ClientOnlyDTO;
 import com.ayi.spring.rest.serv.app.dto.response.ClientInvoicesResponseDTO;
-import com.ayi.spring.rest.serv.app.dto.response.ClientResponseDTO;
+import com.ayi.spring.rest.serv.app.dto.response.ClientFullResponseDTO;
+import com.ayi.spring.rest.serv.app.dto.response.ClientOnlyResponseDTO;
 import com.ayi.spring.rest.serv.app.exceptions.ReadAccessException;
 import com.ayi.spring.rest.serv.app.exceptions.WriteAccessException;
 import com.ayi.spring.rest.serv.app.services.IClientService;
@@ -39,7 +39,7 @@ public class ClientController {
     @ApiOperation(
             value = "Adds a client to the DB table",
             httpMethod = "POST",
-            response = ClientResponseDTO.class
+            response = ClientFullResponseDTO.class
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -55,17 +55,17 @@ public class ClientController {
 
         Map<String, Object> response = new HashMap<>();
 
-        ClientResponseDTO clientResponseDTO;
+        ClientFullResponseDTO clientFullResponseDTO;
 
         try {
-            clientResponseDTO = clientService.addClient(clientFullDTO);
+            clientFullResponseDTO = clientService.addClient(clientFullDTO);
         } catch (WriteAccessException e) {
             response.put(ERROR_CODE, 1000);
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return ResponseEntity.ok(clientResponseDTO);
+        return ResponseEntity.ok(clientFullResponseDTO);
     }
 
     @GetMapping(
@@ -75,7 +75,7 @@ public class ClientController {
     @ApiOperation(
             value = "Retrieves data associated to all the clients",
             httpMethod = "GET",
-            response = ClientResponseDTO.class
+            response = ClientFullResponseDTO.class
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -90,17 +90,17 @@ public class ClientController {
 
         Map<String, Object> response = new HashMap<>();
 
-        List<ClientResponseDTO> clientResponseDTOList;
+        List<ClientFullResponseDTO> clientFullResponseDTOList;
 
         try {
-            clientResponseDTOList = clientService.findAllClients();
+            clientFullResponseDTOList = clientService.findAllClients();
         } catch (ReadAccessException e) {
             response.put(ERROR_CODE, 1001);
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
-        return ResponseEntity.ok(clientResponseDTOList);
+        return ResponseEntity.ok(clientFullResponseDTOList);
     }
 
     @GetMapping(
@@ -110,7 +110,7 @@ public class ClientController {
     @ApiOperation(
             value = "Retrieves data associated to the clients by Id",
             httpMethod = "GET",
-            response = ClientResponseDTO.class
+            response = ClientFullResponseDTO.class
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -127,17 +127,17 @@ public class ClientController {
 
         Map<String, Object> response = new HashMap<>();
 
-        ClientResponseDTO clientResponseDTO;
+        ClientFullResponseDTO clientFullResponseDTO;
 
         try {
-            clientResponseDTO = clientService.findClientById(id);
+            clientFullResponseDTO = clientService.findClientById(id);
         } catch (ReadAccessException e) {
             response.put(ERROR_CODE, 1002);
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
-        return ResponseEntity.ok(clientResponseDTO);
+        return ResponseEntity.ok(clientFullResponseDTO);
     }
 
     @GetMapping(
@@ -147,7 +147,7 @@ public class ClientController {
     @ApiOperation(
             value = "Retrieves data associated to the client invoices",
             httpMethod = "GET",
-            response = ClientResponseDTO.class
+            response = ClientFullResponseDTO.class
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -177,14 +177,14 @@ public class ClientController {
         return ResponseEntity.ok(clientInvoicesResponseDTO);
     }
 
-    @PutMapping(
+    @PatchMapping(
             value = "/updateClient/{id}",
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
     @ApiOperation(
             value = "Retrieves data associated to the client updated",
-            httpMethod = "PUT",
-            response = ClientResponseDTO.class
+            httpMethod = "PATCH",
+            response = ClientFullResponseDTO.class
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -202,17 +202,17 @@ public class ClientController {
 
         Map<String, Object> response = new HashMap<>();
 
-        ClientResponseDTO clientResponseDTO;
+        ClientOnlyResponseDTO clientOnlyResponseDTO;
 
         try {
-            clientResponseDTO = clientService.modifyClient(id, clientOnlyDTO);
+            clientOnlyResponseDTO = clientService.modifyClient(id, clientOnlyDTO);
         } catch (ReadAccessException e) {
             response.put(ERROR_CODE, 1004);
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
-        return ResponseEntity.ok(clientResponseDTO);
+        return ResponseEntity.ok(clientOnlyResponseDTO);
     }
 
     @PatchMapping(
@@ -222,7 +222,7 @@ public class ClientController {
     @ApiOperation(
             value = "Retrieves data associated to the removed client",
             httpMethod = "PATCH",
-            response = ClientResponseDTO.class
+            response = ClientFullResponseDTO.class
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -239,17 +239,17 @@ public class ClientController {
 
         Map<String, Object> response = new HashMap<>();
 
-        ClientResponseDTO clientResponseDTO;
+        ClientFullResponseDTO clientFullResponseDTO;
 
         try {
-            clientResponseDTO = clientService.removeClient(id);
+            clientFullResponseDTO = clientService.removeClient(id);
         } catch (ReadAccessException e) {
             response.put(ERROR_CODE, 1005);
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
-        return ResponseEntity.ok(clientResponseDTO);
+        return ResponseEntity.ok(clientFullResponseDTO);
 
     }
 }
