@@ -95,7 +95,7 @@ public class ClientServiceImpl implements IClientService {
     }
 
     @Override
-    public ClientResponseDTO modifyClientById(Long idClient, ClientOnlyDTO clientOnlyDTO) throws ReadAccessException {
+    public ClientResponseDTO modifyClient(Long idClient, ClientOnlyDTO clientOnlyDTO) throws ReadAccessException {
 
         verifyId(idClient);
         verifyDni(clientOnlyDTO.getDni());

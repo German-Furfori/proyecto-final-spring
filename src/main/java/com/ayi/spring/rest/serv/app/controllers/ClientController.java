@@ -35,7 +35,7 @@ import static com.ayi.spring.rest.serv.app.constants.HashMapStrings.ERROR_MESSAG
 public class ClientController {
     private IClientService clientService;
 
-    @PostMapping(value = "/addClient")
+    @PostMapping(value = "/createClient")
     @ApiOperation(
             value = "Adds a client to the DB table",
             httpMethod = "POST",
@@ -178,7 +178,7 @@ public class ClientController {
     }
 
     @PutMapping(
-            value = "/updateClientById/{id}",
+            value = "/updateClient/{id}",
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
     @ApiOperation(
@@ -195,7 +195,7 @@ public class ClientController {
                     code = 400,
                     message = "Describes errors on invalid payload received")
     })
-    public ResponseEntity<?> updateClientById(
+    public ResponseEntity<?> updateClient(
             @ApiParam(name = "id", required = true, value = "Client Id", example = "1")
             @PathVariable("id") Long id,
             @RequestBody ClientOnlyDTO clientOnlyDTO) {
@@ -205,7 +205,7 @@ public class ClientController {
         ClientResponseDTO clientResponseDTO;
 
         try {
-            clientResponseDTO = clientService.modifyClientById(id, clientOnlyDTO);
+            clientResponseDTO = clientService.modifyClient(id, clientOnlyDTO);
         } catch (ReadAccessException e) {
             response.put(ERROR_CODE, 1004);
             response.put(ERROR_MESSAGE, e.getMessage());
@@ -216,7 +216,7 @@ public class ClientController {
     }
 
     @PatchMapping(
-            value = "/deleteClientById/{id}",
+            value = "/deleteClient/{id}",
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
     @ApiOperation(
@@ -233,7 +233,7 @@ public class ClientController {
                     code = 400,
                     message = "Describes errors on invalid payload received")
     })
-    public ResponseEntity<?> deleteClientById(
+    public ResponseEntity<?> deleteClient(
             @ApiParam(name = "id", required = true, value = "Client Id", example = "1")
             @PathVariable("id") Long id) {
 

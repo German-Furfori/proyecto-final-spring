@@ -18,7 +18,7 @@ public interface IClientService {
 
     ClientInvoicesResponseDTO findClientInvoices(Long idClient) throws ReadAccessException;
 
-    ClientResponseDTO modifyClientById(Long id, ClientOnlyDTO clientOnlyDTO) throws ReadAccessException;
+    ClientResponseDTO modifyClient(Long id, ClientOnlyDTO clientOnlyDTO) throws ReadAccessException;
 
     ClientResponseDTO removeClient(Long id) throws ReadAccessException;
 }
