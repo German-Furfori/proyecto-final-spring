@@ -43,7 +43,7 @@ public class ClientController {
     )
     @ApiResponses(value = {
             @ApiResponse(
-                    code = 200,
+                    code = 201,
                     message = "Body content with the new client"
             ),
             @ApiResponse(
@@ -188,7 +188,7 @@ public class ClientController {
     )
     @ApiResponses(value = {
             @ApiResponse(
-                    code = 200,
+                    code = 201,
                     message = "Body content with the client updated"
             ),
             @ApiResponse(
@@ -226,7 +226,7 @@ public class ClientController {
     )
     @ApiResponses(value = {
             @ApiResponse(
-                    code = 200,
+                    code = 201,
                     message = "Body content with the removed client"
             ),
             @ApiResponse(
