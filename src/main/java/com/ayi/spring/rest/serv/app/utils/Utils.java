@@ -1,9 +1,11 @@
 package com.ayi.spring.rest.serv.app.utils;
 
 import com.ayi.spring.rest.serv.app.entities.ClientEntity;
+import com.ayi.spring.rest.serv.app.entities.InvoiceEntity;
 import com.ayi.spring.rest.serv.app.exceptions.ReadAccessException;
 import com.ayi.spring.rest.serv.app.exceptions.WriteAccessException;
 import com.ayi.spring.rest.serv.app.repositories.IClientRepository;
+import com.ayi.spring.rest.serv.app.repositories.IInvoiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +19,12 @@ public class Utils {
     @Autowired
     IClientRepository clientRepository;
 
+    @Autowired
+    IInvoiceRepository invoiceRepository;
+
     /**
      *
-     * Function to verify the integrity or existence of the ID provided
+     * Function to verify the integrity or existence of the client ID provided
      *
      * */
     public void verifyClientId(Long idClient) throws ReadAccessException {
@@ -28,6 +33,23 @@ public class Utils {
         }
 
         Optional<ClientEntity> entity = clientRepository.findById(idClient);
+
+        if(!entity.isPresent()) {
+            throw new ReadAccessException(READ_ACCESS_EXCEPTION_ID_NOT_FOUND);
+        }
+    }
+
+    /**
+     *
+     * Function to verify the integrity or existence of the ID invoice provided
+     *
+     * */
+    public void verifyInvoiceId(Long idInvoice) throws ReadAccessException {
+        if(idInvoice == null || idInvoice <= 0) {
+            throw new ReadAccessException(READ_ACCESS_EXCEPTION_INCORRECT_INPUT);
+        }
+
+        Optional<InvoiceEntity> entity = invoiceRepository.findById(idInvoice);
 
         if(!entity.isPresent()) {
             throw new ReadAccessException(READ_ACCESS_EXCEPTION_ID_NOT_FOUND);

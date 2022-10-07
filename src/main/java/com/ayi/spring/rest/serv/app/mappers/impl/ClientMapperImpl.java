@@ -30,7 +30,7 @@ public class ClientMapperImpl implements IClientMapper {
     }
 
     @Override
-    public ClientEntity dtoToEntity(ClientOnlyDTO dto) {
+    public ClientEntity dtoOnlyToEntity(ClientOnlyDTO dto) {
         ClientEntity clientEntity = new ClientEntity();
         modelMapper.map(dto, clientEntity);
         return clientEntity;

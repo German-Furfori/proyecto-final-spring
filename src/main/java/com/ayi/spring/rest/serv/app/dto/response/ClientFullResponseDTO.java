@@ -43,7 +43,7 @@ public class ClientFullResponseDTO {
 
     @ApiModelProperty(position = 7, notes = "Client invoices list")
     @JsonIgnoreProperties(value = "client")
-    private List<InvoiceResponseDTO> invoiceList;
+    private List<InvoiceWithClientDataResponseDTO> invoiceList;
 
     @ApiModelProperty(position = 8, notes = "Client addresses list")
     @JsonIgnoreProperties(value = "client")

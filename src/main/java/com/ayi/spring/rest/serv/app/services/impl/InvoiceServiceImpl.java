@@ -2,7 +2,8 @@ package com.ayi.spring.rest.serv.app.services.impl;
 
 import com.ayi.spring.rest.serv.app.dto.request.InvoiceWithClientDTO;
 import com.ayi.spring.rest.serv.app.dto.request.InvoiceWithoutClientDTO;
-import com.ayi.spring.rest.serv.app.dto.response.InvoiceResponseDTO;
+import com.ayi.spring.rest.serv.app.dto.response.InvoiceWithClientDataResponseDTO;
+import com.ayi.spring.rest.serv.app.dto.response.InvoiceWithClientResponseDTO;
 import com.ayi.spring.rest.serv.app.entities.ClientEntity;
 import com.ayi.spring.rest.serv.app.entities.InvoiceEntity;
 import com.ayi.spring.rest.serv.app.exceptions.ReadAccessException;
@@ -17,7 +18,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.ayi.spring.rest.serv.app.constants.ExceptionStrings.*;
 
 @Service
 @Slf4j
@@ -37,7 +42,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
     private Utils utils;
 
     @Override
-    public InvoiceResponseDTO addInvoiceWithClient(Long idClient, InvoiceWithoutClientDTO invoiceWithoutClientDTO) throws ReadAccessException {
+    public InvoiceWithClientResponseDTO addInvoiceWithoutClient(Long idClient, InvoiceWithoutClientDTO invoiceWithoutClientDTO) throws ReadAccessException {
 
         utils.verifyClientId(idClient);
 
@@ -47,29 +52,67 @@ public class InvoiceServiceImpl implements IInvoiceService {
         invoiceEntity.setClient(clientEntity);
         invoiceRepository.save(invoiceEntity);
 
+        return invoiceMapper.entityToDtoSimple(invoiceEntity);
+
+    }
+
+    @Override
+    public InvoiceWithClientDataResponseDTO addInvoiceWithClient(InvoiceWithClientDTO invoiceWithClientDTO) throws WriteAccessException {
+
+        utils.verifyClientDni(invoiceWithClientDTO.getClient().getDni());
+
+        InvoiceEntity invoiceEntity = invoiceMapper.dtoWithToEntity(invoiceWithClientDTO);
+        invoiceEntity.getClient().setIsActive(true);
+
+        invoiceRepository.save(invoiceEntity);
+
         return invoiceMapper.entityToDto(invoiceEntity);
 
     }
 
     @Override
-    public InvoiceResponseDTO addInvoiceWithoutClient(InvoiceWithClientDTO invoiceWithClientDTO) throws WriteAccessException {
-        return null;
+    public List<InvoiceWithClientResponseDTO> findAllInvoices() throws ReadAccessException {
+
+        List<InvoiceWithClientResponseDTO> invoiceWithClientResponseDTOList = new ArrayList<>();
+        List<InvoiceEntity> invoiceEntityList = invoiceRepository.findAll();
+
+        if(invoiceEntityList == null) {
+            throw new ReadAccessException(READ_ACCESS_EXCEPTION_NOT_FOUND);
+        }
+
+        invoiceEntityList.forEach(invoice -> {
+            InvoiceWithClientResponseDTO invoiceWithClientResponseDTO = invoiceMapper.entityToDtoSimple(invoice);
+            invoiceWithClientResponseDTOList.add(invoiceWithClientResponseDTO);
+        });
+
+        return invoiceWithClientResponseDTOList;
+
     }
 
     @Override
-    public List<InvoiceResponseDTO> findAllInvoices() throws ReadAccessException {
-        return null;
+    public InvoiceWithClientResponseDTO findInvoiceById(Long idInvoice) throws ReadAccessException {
+
+        utils.verifyInvoiceId(idInvoice);
+
+        InvoiceEntity invoiceEntity = invoiceRepository.findById(idInvoice).get();
+
+        return invoiceMapper.entityToDtoSimple(invoiceEntity);
+
     }
 
-    @Override
-    public InvoiceResponseDTO findInvoiceById(Long id) throws ReadAccessException {
-        return null;
-    }
-
 
     @Override
-    public InvoiceResponseDTO removeInvoiceById(Long id) throws WriteAccessException {
-        return null;
+    public InvoiceWithClientResponseDTO removeInvoice(Long idInvoice) throws ReadAccessException {
+
+        utils.verifyInvoiceId(idInvoice);
+
+        InvoiceEntity invoiceEntity = invoiceRepository.findById(idInvoice).get();
+        InvoiceWithClientResponseDTO invoiceWithClientResponseDTO = invoiceMapper.entityToDtoSimple(invoiceEntity);
+
+        invoiceRepository.deleteById(idInvoice);
+
+        return invoiceWithClientResponseDTO;
+
     }
 
 }

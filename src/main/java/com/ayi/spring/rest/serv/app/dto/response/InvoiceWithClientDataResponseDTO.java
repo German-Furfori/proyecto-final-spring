@@ -15,10 +15,10 @@ import lombok.ToString;
 @Setter
 @ToString
 @ApiModel(
-        value = "Invoice Response",
+        value = "Invoice With Client Data Response",
         description = "The invoice data provided by the server"
 )
-public class InvoiceResponseDTO {
+public class InvoiceWithClientDataResponseDTO {
 
     @ApiModelProperty(position = 1, notes = "Invoice id")
     private Long idInvoice;

@@ -24,7 +24,7 @@ public class InvoiceEntity {
     @Column(name = "total_amount", nullable = false)
     private Double totalAmount;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "client_fk", referencedColumnName = "id_client")
     private ClientEntity client;
 }

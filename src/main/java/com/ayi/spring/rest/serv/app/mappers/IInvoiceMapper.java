@@ -2,11 +2,14 @@ package com.ayi.spring.rest.serv.app.mappers;
 
 import com.ayi.spring.rest.serv.app.dto.request.InvoiceWithClientDTO;
 import com.ayi.spring.rest.serv.app.dto.request.InvoiceWithoutClientDTO;
-import com.ayi.spring.rest.serv.app.dto.response.InvoiceResponseDTO;
+import com.ayi.spring.rest.serv.app.dto.response.InvoiceWithClientDataResponseDTO;
+import com.ayi.spring.rest.serv.app.dto.response.InvoiceWithClientResponseDTO;
 import com.ayi.spring.rest.serv.app.entities.InvoiceEntity;
 
 public interface IInvoiceMapper {
-    InvoiceResponseDTO entityToDto(InvoiceEntity entity);
+    InvoiceWithClientDataResponseDTO entityToDto(InvoiceEntity entity);
+
+    InvoiceWithClientResponseDTO entityToDtoSimple(InvoiceEntity entity);
 
     InvoiceEntity dtoWithToEntity(InvoiceWithClientDTO dto);
 

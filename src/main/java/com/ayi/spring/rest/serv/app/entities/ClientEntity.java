@@ -39,7 +39,7 @@ public class ClientEntity {
     @JoinColumn(name = "details_fk", referencedColumnName = "id_details")
     private DetailsEntity clientDetails;
 
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "client")
     private List<InvoiceEntity> invoiceList;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)

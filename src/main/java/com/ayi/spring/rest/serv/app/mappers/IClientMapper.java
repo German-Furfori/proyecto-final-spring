@@ -11,7 +11,7 @@ public interface IClientMapper {
 
     ClientOnlyResponseDTO entityToOnlyDto(ClientEntity entity);
 
-    ClientEntity dtoToEntity(ClientOnlyDTO dto);
+    ClientEntity dtoOnlyToEntity(ClientOnlyDTO dto);
 
     ClientEntity fullDtoToEntity(ClientFullDTO dto);
 
