@@ -4,7 +4,7 @@ import com.ayi.spring.rest.serv.app.dto.request.InvoiceWithClientDTO;
 import com.ayi.spring.rest.serv.app.dto.request.InvoiceWithoutClientDTO;
 import com.ayi.spring.rest.serv.app.dto.response.InvoiceWithFullClientDataResponseDTO;
 import com.ayi.spring.rest.serv.app.dto.response.InvoiceWithClientResponseDTO;
-import com.ayi.spring.rest.serv.app.exceptions.ReadAccessException;
+import com.ayi.spring.rest.serv.app.exceptions.GenericException;
 import com.ayi.spring.rest.serv.app.services.IInvoiceService;
 import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
@@ -57,7 +57,7 @@ public class InvoiceController {
 
         try {
             invoiceWithClientResponseDTO = invoiceService.addInvoiceWithoutClient(id, invoiceWithoutClientDTO);
-        } catch (ReadAccessException e) {
+        } catch (GenericException e) {
             response.put(ERROR_CODE, 2000);
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
@@ -90,7 +90,7 @@ public class InvoiceController {
 
         try {
             invoiceWithFullClientDataResponseDTO = invoiceService.addInvoiceWithClient(invoiceWithClientDTO);
-        } catch (ReadAccessException e) {
+        } catch (GenericException e) {
             response.put(ERROR_CODE, 2001);
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
@@ -125,7 +125,7 @@ public class InvoiceController {
 
         try {
             invoiceWithClientResponseDTOList = invoiceService.findAllInvoices();
-        } catch (ReadAccessException e) {
+        } catch (GenericException e) {
             response.put(ERROR_CODE, 2002);
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
@@ -162,7 +162,7 @@ public class InvoiceController {
 
         try {
             invoiceWithClientResponseDTO = invoiceService.findInvoiceById(id);
-        } catch (ReadAccessException e) {
+        } catch (GenericException e) {
             response.put(ERROR_CODE, 2003);
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
@@ -199,7 +199,7 @@ public class InvoiceController {
 
         try {
             invoiceWithClientResponseDTO = invoiceService.removeInvoice(id);
-        } catch (ReadAccessException e) {
+        } catch (GenericException e) {
             response.put(ERROR_CODE, 2004);
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);

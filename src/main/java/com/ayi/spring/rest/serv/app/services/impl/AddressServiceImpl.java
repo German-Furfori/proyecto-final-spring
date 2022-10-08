@@ -2,12 +2,9 @@ package com.ayi.spring.rest.serv.app.services.impl;
 
 import com.ayi.spring.rest.serv.app.dto.request.AddressDTO;
 import com.ayi.spring.rest.serv.app.dto.response.AddressResponseDTO;
-import com.ayi.spring.rest.serv.app.dto.response.InvoiceWithClientResponseDTO;
 import com.ayi.spring.rest.serv.app.entities.AddressEntity;
 import com.ayi.spring.rest.serv.app.entities.ClientEntity;
-import com.ayi.spring.rest.serv.app.entities.InvoiceEntity;
-import com.ayi.spring.rest.serv.app.exceptions.ReadAccessException;
-import com.ayi.spring.rest.serv.app.exceptions.WriteAccessException;
+import com.ayi.spring.rest.serv.app.exceptions.GenericException;
 import com.ayi.spring.rest.serv.app.mappers.IAddressMapper;
 import com.ayi.spring.rest.serv.app.repositories.IAddressRepository;
 import com.ayi.spring.rest.serv.app.repositories.IClientRepository;
@@ -42,7 +39,7 @@ public class AddressServiceImpl implements IAddressService {
     Utils utils;
 
     @Override
-    public AddressResponseDTO addAddress(Long idClient, AddressDTO addressDTO) throws ReadAccessException {
+    public AddressResponseDTO addAddress(Long idClient, AddressDTO addressDTO) throws GenericException {
 
         utils.verifyClientId(idClient);
 
@@ -57,13 +54,13 @@ public class AddressServiceImpl implements IAddressService {
     }
 
     @Override
-    public List<AddressResponseDTO> findAllAddresses() throws ReadAccessException {
+    public List<AddressResponseDTO> findAllAddresses() throws GenericException {
 
         List<AddressResponseDTO> addressResponseDTOList = new ArrayList<>();
         List<AddressEntity> addressEntityList = addressRepository.findAll();
 
         if(addressEntityList == null) {
-            throw new ReadAccessException(READ_ACCESS_EXCEPTION_NOT_FOUND);
+            throw new GenericException(READ_ACCESS_EXCEPTION_NOT_FOUND);
         }
 
         addressEntityList.forEach(address -> {
@@ -76,7 +73,7 @@ public class AddressServiceImpl implements IAddressService {
     }
 
     @Override
-    public AddressResponseDTO findAddressById(Long idAddress) throws ReadAccessException {
+    public AddressResponseDTO findAddressById(Long idAddress) throws GenericException {
 
         utils.verifyAddressId(idAddress);
 
@@ -87,7 +84,7 @@ public class AddressServiceImpl implements IAddressService {
     }
 
     @Override
-    public AddressResponseDTO modifyAddress(Long idClient, Long idAddress, AddressDTO addressDTO) throws ReadAccessException {
+    public AddressResponseDTO modifyAddress(Long idClient, Long idAddress, AddressDTO addressDTO) throws GenericException {
 
         utils.verifyClientId(idClient);
         utils.verifyClientAddressId(idClient, idAddress);
@@ -101,7 +98,7 @@ public class AddressServiceImpl implements IAddressService {
     }
 
     @Override
-    public AddressResponseDTO removeAddress(Long idClient, Long idAddress) throws ReadAccessException {
+    public AddressResponseDTO removeAddress(Long idClient, Long idAddress) throws GenericException {
 
         utils.verifyClientId(idClient);
         utils.verifyClientAddressId(idClient, idAddress);

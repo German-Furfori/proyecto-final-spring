@@ -41,6 +41,11 @@ public class ClientMapperImpl implements IClientMapper {
     public ClientEntity fullDtoToEntity(ClientFullDTO dto) {
         ClientEntity clientEntity = new ClientEntity();
         modelMapper.map(dto, clientEntity);
+
+        clientEntity.getAddressList().forEach(addressEntity -> {
+            addressEntity.setClient(clientEntity);
+        });
+
         return clientEntity;
     }
 

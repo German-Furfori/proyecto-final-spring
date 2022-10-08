@@ -2,8 +2,7 @@ package com.ayi.spring.rest.serv.app.controllers;
 
 import com.ayi.spring.rest.serv.app.dto.request.DetailsDTO;
 import com.ayi.spring.rest.serv.app.dto.response.DetailsWithClientResponseDTO;
-import com.ayi.spring.rest.serv.app.dto.response.InvoiceWithClientResponseDTO;
-import com.ayi.spring.rest.serv.app.exceptions.ReadAccessException;
+import com.ayi.spring.rest.serv.app.exceptions.GenericException;
 import com.ayi.spring.rest.serv.app.services.IDetailsService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
@@ -59,7 +58,7 @@ public class DetailsController {
 
         try {
             detailsWithClientResponseDTOList = detailsService.findAllDetails();
-        } catch (ReadAccessException e) {
+        } catch (GenericException e) {
             response.put(ERROR_CODE, 4000);
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
@@ -97,7 +96,7 @@ public class DetailsController {
 
         try {
             detailsWithClientResponseDTO = detailsService.modifyDetails(id, detailsDTO);
-        } catch (ReadAccessException e) {
+        } catch (GenericException e) {
             response.put(ERROR_CODE, 2003);
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);

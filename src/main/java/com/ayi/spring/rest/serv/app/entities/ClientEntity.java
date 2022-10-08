@@ -38,7 +38,7 @@ public class ClientEntity {
     @JoinColumn(name = "details_fk", referencedColumnName = "id_details")
     private DetailsEntity clientDetails;
 
-    @OneToMany(mappedBy = "client")
+    @OneToMany(mappedBy = "client", cascade = CascadeType.PERSIST)
     private List<InvoiceEntity> invoiceList;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.PERSIST)

@@ -1,11 +1,9 @@
 package com.ayi.spring.rest.serv.app.services.impl;
 
 import com.ayi.spring.rest.serv.app.dto.request.DetailsDTO;
-import com.ayi.spring.rest.serv.app.dto.response.AddressResponseDTO;
 import com.ayi.spring.rest.serv.app.dto.response.DetailsWithClientResponseDTO;
 import com.ayi.spring.rest.serv.app.entities.DetailsEntity;
-import com.ayi.spring.rest.serv.app.exceptions.ReadAccessException;
-import com.ayi.spring.rest.serv.app.exceptions.WriteAccessException;
+import com.ayi.spring.rest.serv.app.exceptions.GenericException;
 import com.ayi.spring.rest.serv.app.mappers.IDetailsMapper;
 import com.ayi.spring.rest.serv.app.repositories.IDetailsRepository;
 import com.ayi.spring.rest.serv.app.services.IDetailsService;
@@ -36,13 +34,13 @@ public class DetailsServiceImpl implements IDetailsService {
     Utils utils;
 
     @Override
-    public List<DetailsWithClientResponseDTO> findAllDetails() throws ReadAccessException {
+    public List<DetailsWithClientResponseDTO> findAllDetails() throws GenericException {
 
         List<DetailsWithClientResponseDTO> detailsWithClientResponseDTOList = new ArrayList<>();
         List<DetailsEntity> detailsEntityList = detailsRepository.findAll();
 
         if(detailsEntityList == null) {
-            throw new ReadAccessException(READ_ACCESS_EXCEPTION_NOT_FOUND);
+            throw new GenericException(READ_ACCESS_EXCEPTION_NOT_FOUND);
         }
 
         detailsEntityList.forEach(detail -> {
@@ -55,7 +53,7 @@ public class DetailsServiceImpl implements IDetailsService {
     }
 
     @Override
-    public DetailsWithClientResponseDTO modifyDetails(Long idDetails, DetailsDTO detailsDTO) throws ReadAccessException {
+    public DetailsWithClientResponseDTO modifyDetails(Long idDetails, DetailsDTO detailsDTO) throws GenericException {
 
         utils.verifyDetailsId(idDetails);
 

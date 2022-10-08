@@ -5,7 +5,7 @@ import com.ayi.spring.rest.serv.app.dto.request.ClientOnlyDTO;
 import com.ayi.spring.rest.serv.app.dto.response.ClientInvoicesResponseDTO;
 import com.ayi.spring.rest.serv.app.dto.response.ClientFullResponseDTO;
 import com.ayi.spring.rest.serv.app.dto.response.ClientOnlyResponseDTO;
-import com.ayi.spring.rest.serv.app.exceptions.ReadAccessException;
+import com.ayi.spring.rest.serv.app.exceptions.GenericException;
 import com.ayi.spring.rest.serv.app.exceptions.WriteAccessException;
 import com.ayi.spring.rest.serv.app.services.IClientService;
 import io.swagger.annotations.Api;
@@ -94,7 +94,7 @@ public class ClientController {
 
         try {
             clientFullResponseDTOList = clientService.findAllClients();
-        } catch (ReadAccessException e) {
+        } catch (GenericException e) {
             response.put(ERROR_CODE, 1001);
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
@@ -131,7 +131,7 @@ public class ClientController {
 
         try {
             clientFullResponseDTO = clientService.findClientById(id);
-        } catch (ReadAccessException e) {
+        } catch (GenericException e) {
             response.put(ERROR_CODE, 1002);
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
@@ -168,7 +168,7 @@ public class ClientController {
 
         try {
             clientInvoicesResponseDTO = clientService.findClientInvoices(id);
-        } catch (ReadAccessException e) {
+        } catch (GenericException e) {
             response.put(ERROR_CODE, 1003);
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
@@ -206,7 +206,7 @@ public class ClientController {
 
         try {
             clientOnlyResponseDTO = clientService.modifyClient(id, clientOnlyDTO);
-        } catch (ReadAccessException e) {
+        } catch (GenericException e) {
             response.put(ERROR_CODE, 1004);
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
@@ -243,7 +243,7 @@ public class ClientController {
 
         try {
             clientFullResponseDTO = clientService.removeClient(id);
-        } catch (ReadAccessException e) {
+        } catch (GenericException e) {
             response.put(ERROR_CODE, 1005);
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);

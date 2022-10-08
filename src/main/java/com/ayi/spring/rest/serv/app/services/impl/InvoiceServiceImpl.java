@@ -6,7 +6,7 @@ import com.ayi.spring.rest.serv.app.dto.response.InvoiceWithFullClientDataRespon
 import com.ayi.spring.rest.serv.app.dto.response.InvoiceWithClientResponseDTO;
 import com.ayi.spring.rest.serv.app.entities.ClientEntity;
 import com.ayi.spring.rest.serv.app.entities.InvoiceEntity;
-import com.ayi.spring.rest.serv.app.exceptions.ReadAccessException;
+import com.ayi.spring.rest.serv.app.exceptions.GenericException;
 import com.ayi.spring.rest.serv.app.exceptions.WriteAccessException;
 import com.ayi.spring.rest.serv.app.mappers.IInvoiceMapper;
 import com.ayi.spring.rest.serv.app.repositories.IClientRepository;
@@ -42,7 +42,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
     private Utils utils;
 
     @Override
-    public InvoiceWithClientResponseDTO addInvoiceWithoutClient(Long idClient, InvoiceWithoutClientDTO invoiceWithoutClientDTO) throws ReadAccessException {
+    public InvoiceWithClientResponseDTO addInvoiceWithoutClient(Long idClient, InvoiceWithoutClientDTO invoiceWithoutClientDTO) throws GenericException {
 
         utils.verifyClientId(idClient);
 
@@ -57,7 +57,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
     }
 
     @Override
-    public InvoiceWithFullClientDataResponseDTO addInvoiceWithClient(InvoiceWithClientDTO invoiceWithClientDTO) throws WriteAccessException {
+    public InvoiceWithFullClientDataResponseDTO addInvoiceWithClient(InvoiceWithClientDTO invoiceWithClientDTO) throws GenericException {
 
         utils.verifyClientDni(invoiceWithClientDTO.getClient().getDni());
 
@@ -71,13 +71,13 @@ public class InvoiceServiceImpl implements IInvoiceService {
     }
 
     @Override
-    public List<InvoiceWithClientResponseDTO> findAllInvoices() throws ReadAccessException {
+    public List<InvoiceWithClientResponseDTO> findAllInvoices() throws GenericException {
 
         List<InvoiceWithClientResponseDTO> invoiceWithClientResponseDTOList = new ArrayList<>();
         List<InvoiceEntity> invoiceEntityList = invoiceRepository.findAll();
 
         if(invoiceEntityList == null) {
-            throw new ReadAccessException(READ_ACCESS_EXCEPTION_NOT_FOUND);
+            throw new GenericException(READ_ACCESS_EXCEPTION_NOT_FOUND);
         }
 
         invoiceEntityList.forEach(invoice -> {
@@ -90,7 +90,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
     }
 
     @Override
-    public InvoiceWithClientResponseDTO findInvoiceById(Long idInvoice) throws ReadAccessException {
+    public InvoiceWithClientResponseDTO findInvoiceById(Long idInvoice) throws GenericException {
 
         utils.verifyInvoiceId(idInvoice);
 
@@ -102,7 +102,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
 
 
     @Override
-    public InvoiceWithClientResponseDTO removeInvoice(Long idInvoice) throws ReadAccessException {
+    public InvoiceWithClientResponseDTO removeInvoice(Long idInvoice) throws GenericException {
 
         utils.verifyInvoiceId(idInvoice);
 

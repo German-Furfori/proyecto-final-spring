@@ -4,7 +4,7 @@ import com.ayi.spring.rest.serv.app.entities.AddressEntity;
 import com.ayi.spring.rest.serv.app.entities.ClientEntity;
 import com.ayi.spring.rest.serv.app.entities.DetailsEntity;
 import com.ayi.spring.rest.serv.app.entities.InvoiceEntity;
-import com.ayi.spring.rest.serv.app.exceptions.ReadAccessException;
+import com.ayi.spring.rest.serv.app.exceptions.GenericException;
 import com.ayi.spring.rest.serv.app.exceptions.WriteAccessException;
 import com.ayi.spring.rest.serv.app.repositories.IAddressRepository;
 import com.ayi.spring.rest.serv.app.repositories.IClientRepository;
@@ -38,15 +38,15 @@ public class Utils {
      * Function to verify the integrity or existence of the client ID provided
      *
      * */
-    public void verifyClientId(Long idClient) throws ReadAccessException {
+    public void verifyClientId(Long idClient) throws GenericException {
         if(idClient == null || idClient <= 0) {
-            throw new ReadAccessException(READ_ACCESS_EXCEPTION_INCORRECT_INPUT);
+            throw new GenericException(READ_ACCESS_EXCEPTION_INCORRECT_INPUT);
         }
 
         Optional<ClientEntity> entity = clientRepository.findById(idClient);
 
         if(!entity.isPresent()) {
-            throw new ReadAccessException(READ_ACCESS_EXCEPTION_ID_NOT_FOUND);
+            throw new GenericException(READ_ACCESS_EXCEPTION_ID_NOT_FOUND);
         }
     }
 
@@ -55,15 +55,15 @@ public class Utils {
      * Function to verify the integrity or existence of the invoice ID provided
      *
      * */
-    public void verifyInvoiceId(Long idInvoice) throws ReadAccessException {
+    public void verifyInvoiceId(Long idInvoice) throws GenericException {
         if(idInvoice == null || idInvoice <= 0) {
-            throw new ReadAccessException(READ_ACCESS_EXCEPTION_INCORRECT_INPUT);
+            throw new GenericException(READ_ACCESS_EXCEPTION_INCORRECT_INPUT);
         }
 
         Optional<InvoiceEntity> entity = invoiceRepository.findById(idInvoice);
 
         if(!entity.isPresent()) {
-            throw new ReadAccessException(READ_ACCESS_EXCEPTION_ID_NOT_FOUND);
+            throw new GenericException(READ_ACCESS_EXCEPTION_ID_NOT_FOUND);
         }
     }
 
@@ -72,15 +72,15 @@ public class Utils {
      * Function to verify the integrity or existence of the address ID provided
      *
      * */
-    public void verifyAddressId(Long idAddress) throws ReadAccessException {
+    public void verifyAddressId(Long idAddress) throws GenericException {
         if(idAddress == null || idAddress <= 0) {
-            throw new ReadAccessException(READ_ACCESS_EXCEPTION_INCORRECT_INPUT);
+            throw new GenericException(READ_ACCESS_EXCEPTION_INCORRECT_INPUT);
         }
 
         Optional<AddressEntity> entity = addressRepository.findById(idAddress);
 
         if(!entity.isPresent()) {
-            throw new ReadAccessException(READ_ACCESS_EXCEPTION_ID_NOT_FOUND);
+            throw new GenericException(READ_ACCESS_EXCEPTION_ID_NOT_FOUND);
         }
     }
 
@@ -89,15 +89,15 @@ public class Utils {
      * Function to verify the integrity or existence of the details ID provided
      *
      * */
-    public void verifyDetailsId(Long idDetails) throws ReadAccessException {
+    public void verifyDetailsId(Long idDetails) throws GenericException {
         if(idDetails == null || idDetails <= 0) {
-            throw new ReadAccessException(READ_ACCESS_EXCEPTION_INCORRECT_INPUT);
+            throw new GenericException(READ_ACCESS_EXCEPTION_INCORRECT_INPUT);
         }
 
         Optional<DetailsEntity> entity = detailsRepository.findById(idDetails);
 
         if(!entity.isPresent()) {
-            throw new ReadAccessException(READ_ACCESS_EXCEPTION_ID_NOT_FOUND);
+            throw new GenericException(READ_ACCESS_EXCEPTION_ID_NOT_FOUND);
         }
     }
 
@@ -107,11 +107,11 @@ public class Utils {
      * The ID Client must be verified before using this method
      *
      * */
-    public void verifyClientAddressId(Long idClient, Long idAddress) throws ReadAccessException {
+    public void verifyClientAddressId(Long idClient, Long idAddress) throws GenericException {
         AtomicReference<Boolean> addressExistence = new AtomicReference<>(false);
 
         if(idAddress == null || idClient == null || idAddress <= 0 || idClient <= 0) {
-            throw new ReadAccessException(READ_ACCESS_EXCEPTION_INCORRECT_INPUT);
+            throw new GenericException(READ_ACCESS_EXCEPTION_INCORRECT_INPUT);
         }
 
         ClientEntity clientEntity = clientRepository.findById(idClient).get();
@@ -121,7 +121,7 @@ public class Utils {
         });
 
         if(!addressExistence.get()) {
-            throw new ReadAccessException(READ_ACCESS_EXCEPTION_CLIENT_ADDRESS_NOT_FOUND);
+            throw new GenericException(READ_ACCESS_EXCEPTION_CLIENT_ADDRESS_NOT_FOUND);
         }
     }
 

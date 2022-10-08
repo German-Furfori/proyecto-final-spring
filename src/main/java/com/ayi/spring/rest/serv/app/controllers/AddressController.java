@@ -2,7 +2,7 @@ package com.ayi.spring.rest.serv.app.controllers;
 
 import com.ayi.spring.rest.serv.app.dto.request.AddressDTO;
 import com.ayi.spring.rest.serv.app.dto.response.AddressResponseDTO;
-import com.ayi.spring.rest.serv.app.exceptions.ReadAccessException;
+import com.ayi.spring.rest.serv.app.exceptions.GenericException;
 import com.ayi.spring.rest.serv.app.services.IAddressService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
@@ -59,7 +59,7 @@ public class AddressController {
 
         try {
             addressResponseDTO = addressService.addAddress(id, addressDTO);
-        } catch (ReadAccessException e) {
+        } catch (GenericException e) {
             response.put(ERROR_CODE, 3000);
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
@@ -94,7 +94,7 @@ public class AddressController {
 
         try {
             addressResponseDTOList = addressService.findAllAddresses();
-        } catch (ReadAccessException e) {
+        } catch (GenericException e) {
             response.put(ERROR_CODE, 3001);
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
@@ -131,7 +131,7 @@ public class AddressController {
 
         try {
             addressResponseDTO = addressService.findAddressById(id);
-        } catch (ReadAccessException e) {
+        } catch (GenericException e) {
             response.put(ERROR_CODE, 3002);
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
@@ -171,7 +171,7 @@ public class AddressController {
 
         try {
             addressResponseDTO = addressService.modifyAddress(idClient, idAddress, addressDTO);
-        } catch (ReadAccessException e) {
+        } catch (GenericException e) {
             response.put(ERROR_CODE, 3004);
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
@@ -210,7 +210,7 @@ public class AddressController {
 
         try {
             addressResponseDTO = addressService.removeAddress(idClient, idAddress);
-        } catch (ReadAccessException e) {
+        } catch (GenericException e) {
             response.put(ERROR_CODE, 3004);
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);

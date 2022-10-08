@@ -5,21 +5,21 @@ import com.ayi.spring.rest.serv.app.dto.request.ClientOnlyDTO;
 import com.ayi.spring.rest.serv.app.dto.response.ClientInvoicesResponseDTO;
 import com.ayi.spring.rest.serv.app.dto.response.ClientFullResponseDTO;
 import com.ayi.spring.rest.serv.app.dto.response.ClientOnlyResponseDTO;
-import com.ayi.spring.rest.serv.app.exceptions.ReadAccessException;
+import com.ayi.spring.rest.serv.app.exceptions.GenericException;
 import com.ayi.spring.rest.serv.app.exceptions.WriteAccessException;
 
 import java.util.List;
 
 public interface IClientService {
-    ClientFullResponseDTO addClient(ClientFullDTO clientFullDTO) throws WriteAccessException;
+    ClientFullResponseDTO addClient(ClientFullDTO clientFullDTO) throws GenericException;
 
-    List<ClientFullResponseDTO> findAllClients() throws ReadAccessException;
+    List<ClientFullResponseDTO> findAllClients() throws GenericException;
 
-    ClientFullResponseDTO findClientById(Long idClient) throws ReadAccessException;
+    ClientFullResponseDTO findClientById(Long idClient) throws GenericException;
 
-    ClientInvoicesResponseDTO findClientInvoices(Long idClient) throws ReadAccessException;
+    ClientInvoicesResponseDTO findClientInvoices(Long idClient) throws GenericException;
 
-    ClientOnlyResponseDTO modifyClient(Long id, ClientOnlyDTO clientOnlyDTO) throws ReadAccessException;
+    ClientOnlyResponseDTO modifyClient(Long id, ClientOnlyDTO clientOnlyDTO) throws GenericException;
 
-    ClientFullResponseDTO removeClient(Long id) throws ReadAccessException;
+    ClientFullResponseDTO removeClient(Long id) throws GenericException;
 }

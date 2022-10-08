@@ -6,7 +6,7 @@ import com.ayi.spring.rest.serv.app.dto.response.ClientInvoicesResponseDTO;
 import com.ayi.spring.rest.serv.app.dto.response.ClientFullResponseDTO;
 import com.ayi.spring.rest.serv.app.dto.response.ClientOnlyResponseDTO;
 import com.ayi.spring.rest.serv.app.entities.ClientEntity;
-import com.ayi.spring.rest.serv.app.exceptions.ReadAccessException;
+import com.ayi.spring.rest.serv.app.exceptions.GenericException;
 import com.ayi.spring.rest.serv.app.exceptions.WriteAccessException;
 import com.ayi.spring.rest.serv.app.mappers.IClientMapper;
 import com.ayi.spring.rest.serv.app.repositories.IClientRepository;
@@ -37,7 +37,7 @@ public class ClientServiceImpl implements IClientService {
     private Utils utils;
 
     @Override
-    public ClientFullResponseDTO addClient(ClientFullDTO clientFullDTO) throws WriteAccessException {
+    public ClientFullResponseDTO addClient(ClientFullDTO clientFullDTO) throws GenericException {
 
         utils.verifyClientDni(clientFullDTO.getDni());
 
@@ -51,13 +51,13 @@ public class ClientServiceImpl implements IClientService {
     }
 
     @Override
-    public List<ClientFullResponseDTO> findAllClients() throws ReadAccessException {
+    public List<ClientFullResponseDTO> findAllClients() throws GenericException {
 
         List<ClientFullResponseDTO> clientFullResponseDTOList = new ArrayList<>();
         List<ClientEntity> clientEntityList = clientRepository.findAll();
 
         if(clientEntityList == null) {
-            throw new ReadAccessException(READ_ACCESS_EXCEPTION_NOT_FOUND);
+            throw new GenericException(READ_ACCESS_EXCEPTION_NOT_FOUND);
         }
 
         clientEntityList.forEach(client -> {
@@ -70,7 +70,7 @@ public class ClientServiceImpl implements IClientService {
     }
 
     @Override
-    public ClientFullResponseDTO findClientById(Long idClient) throws ReadAccessException {
+    public ClientFullResponseDTO findClientById(Long idClient) throws GenericException {
 
         utils.verifyClientId(idClient);
 
@@ -81,7 +81,7 @@ public class ClientServiceImpl implements IClientService {
     }
 
     @Override
-    public ClientInvoicesResponseDTO findClientInvoices(Long idClient) throws ReadAccessException {
+    public ClientInvoicesResponseDTO findClientInvoices(Long idClient) throws GenericException {
 
         utils.verifyClientId(idClient);
 
@@ -98,7 +98,7 @@ public class ClientServiceImpl implements IClientService {
     }
 
     @Override
-    public ClientOnlyResponseDTO modifyClient(Long idClient, ClientOnlyDTO clientOnlyDTO) throws ReadAccessException {
+    public ClientOnlyResponseDTO modifyClient(Long idClient, ClientOnlyDTO clientOnlyDTO) throws GenericException {
 
         utils.verifyClientId(idClient);
         utils.verifyClientDni(clientOnlyDTO.getDni());
@@ -116,7 +116,7 @@ public class ClientServiceImpl implements IClientService {
     }
 
     @Override
-    public ClientFullResponseDTO removeClient(Long idClient) throws ReadAccessException {
+    public ClientFullResponseDTO removeClient(Long idClient) throws GenericException {
 
         utils.verifyClientId(idClient);
 
