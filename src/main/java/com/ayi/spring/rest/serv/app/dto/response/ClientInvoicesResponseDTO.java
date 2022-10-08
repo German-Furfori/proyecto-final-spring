@@ -26,5 +26,5 @@ public class ClientInvoicesResponseDTO {
 
     @ApiModelProperty(position = 2, notes = "Client invoices list")
     @JsonIgnoreProperties(value = "client")
-    private List<InvoiceWithClientDataResponseDTO> invoiceList;
+    private List<InvoiceWithFullClientDataResponseDTO> invoiceList;
 }

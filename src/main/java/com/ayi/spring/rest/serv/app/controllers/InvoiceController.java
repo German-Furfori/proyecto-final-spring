@@ -2,8 +2,7 @@ package com.ayi.spring.rest.serv.app.controllers;
 
 import com.ayi.spring.rest.serv.app.dto.request.InvoiceWithClientDTO;
 import com.ayi.spring.rest.serv.app.dto.request.InvoiceWithoutClientDTO;
-import com.ayi.spring.rest.serv.app.dto.response.ClientFullResponseDTO;
-import com.ayi.spring.rest.serv.app.dto.response.InvoiceWithClientDataResponseDTO;
+import com.ayi.spring.rest.serv.app.dto.response.InvoiceWithFullClientDataResponseDTO;
 import com.ayi.spring.rest.serv.app.dto.response.InvoiceWithClientResponseDTO;
 import com.ayi.spring.rest.serv.app.exceptions.ReadAccessException;
 import com.ayi.spring.rest.serv.app.services.IInvoiceService;
@@ -35,7 +34,7 @@ public class InvoiceController {
     @ApiOperation(
             value = "Adds an invoice to the data base",
             httpMethod = "POST",
-            response = InvoiceWithClientDataResponseDTO.class
+            response = InvoiceWithFullClientDataResponseDTO.class
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -71,7 +70,7 @@ public class InvoiceController {
     @ApiOperation(
             value = "Adds an invoice to the data base with a new client",
             httpMethod = "POST",
-            response = InvoiceWithClientDataResponseDTO.class
+            response = InvoiceWithFullClientDataResponseDTO.class
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -87,17 +86,17 @@ public class InvoiceController {
 
         Map<String, Object> response = new HashMap<>();
 
-        InvoiceWithClientDataResponseDTO invoiceWithClientDataResponseDTO;
+        InvoiceWithFullClientDataResponseDTO invoiceWithFullClientDataResponseDTO;
 
         try {
-            invoiceWithClientDataResponseDTO = invoiceService.addInvoiceWithClient(invoiceWithClientDTO);
+            invoiceWithFullClientDataResponseDTO = invoiceService.addInvoiceWithClient(invoiceWithClientDTO);
         } catch (ReadAccessException e) {
             response.put(ERROR_CODE, 2001);
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return ResponseEntity.ok(invoiceWithClientDataResponseDTO);
+        return ResponseEntity.ok(invoiceWithFullClientDataResponseDTO);
     }
 
     @GetMapping(

@@ -2,11 +2,13 @@ package com.ayi.spring.rest.serv.app.utils;
 
 import com.ayi.spring.rest.serv.app.entities.AddressEntity;
 import com.ayi.spring.rest.serv.app.entities.ClientEntity;
+import com.ayi.spring.rest.serv.app.entities.DetailsEntity;
 import com.ayi.spring.rest.serv.app.entities.InvoiceEntity;
 import com.ayi.spring.rest.serv.app.exceptions.ReadAccessException;
 import com.ayi.spring.rest.serv.app.exceptions.WriteAccessException;
 import com.ayi.spring.rest.serv.app.repositories.IAddressRepository;
 import com.ayi.spring.rest.serv.app.repositories.IClientRepository;
+import com.ayi.spring.rest.serv.app.repositories.IDetailsRepository;
 import com.ayi.spring.rest.serv.app.repositories.IInvoiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,9 @@ public class Utils {
 
     @Autowired
     IAddressRepository addressRepository;
+
+    @Autowired
+    IDetailsRepository detailsRepository;
 
     /**
      *
@@ -73,6 +78,23 @@ public class Utils {
         }
 
         Optional<AddressEntity> entity = addressRepository.findById(idAddress);
+
+        if(!entity.isPresent()) {
+            throw new ReadAccessException(READ_ACCESS_EXCEPTION_ID_NOT_FOUND);
+        }
+    }
+
+    /**
+     *
+     * Function to verify the integrity or existence of the details ID provided
+     *
+     * */
+    public void verifyDetailsId(Long idDetails) throws ReadAccessException {
+        if(idDetails == null || idDetails <= 0) {
+            throw new ReadAccessException(READ_ACCESS_EXCEPTION_INCORRECT_INPUT);
+        }
+
+        Optional<DetailsEntity> entity = detailsRepository.findById(idDetails);
 
         if(!entity.isPresent()) {
             throw new ReadAccessException(READ_ACCESS_EXCEPTION_ID_NOT_FOUND);

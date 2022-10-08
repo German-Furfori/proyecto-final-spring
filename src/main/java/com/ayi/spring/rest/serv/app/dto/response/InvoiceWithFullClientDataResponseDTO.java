@@ -18,7 +18,7 @@ import lombok.ToString;
         value = "Invoice With Client Data Response",
         description = "The invoice data provided by the server"
 )
-public class InvoiceWithClientDataResponseDTO {
+public class InvoiceWithFullClientDataResponseDTO {
 
     @ApiModelProperty(position = 1, notes = "Invoice id")
     private Long idInvoice;

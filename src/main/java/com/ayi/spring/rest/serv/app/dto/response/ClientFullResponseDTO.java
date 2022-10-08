@@ -38,12 +38,11 @@ public class ClientFullResponseDTO {
     private Boolean isActive;
 
     @ApiModelProperty(position = 6, notes = "Client account details")
-    @JsonIgnoreProperties(value = "client") // To avoid infinite loop in the bidirectional relationship
-    private DetailsResponseDTO clientDetails;
+    private DetailsOnlyResponseDTO clientDetails;
 
     @ApiModelProperty(position = 7, notes = "Client invoices list")
     @JsonIgnoreProperties(value = "client")
-    private List<InvoiceWithClientDataResponseDTO> invoiceList;
+    private List<InvoiceWithFullClientDataResponseDTO> invoiceList;
 
     @ApiModelProperty(position = 8, notes = "Client addresses list")
     @JsonIgnoreProperties(value = "client")

@@ -2,7 +2,7 @@ package com.ayi.spring.rest.serv.app.services.impl;
 
 import com.ayi.spring.rest.serv.app.dto.request.InvoiceWithClientDTO;
 import com.ayi.spring.rest.serv.app.dto.request.InvoiceWithoutClientDTO;
-import com.ayi.spring.rest.serv.app.dto.response.InvoiceWithClientDataResponseDTO;
+import com.ayi.spring.rest.serv.app.dto.response.InvoiceWithFullClientDataResponseDTO;
 import com.ayi.spring.rest.serv.app.dto.response.InvoiceWithClientResponseDTO;
 import com.ayi.spring.rest.serv.app.entities.ClientEntity;
 import com.ayi.spring.rest.serv.app.entities.InvoiceEntity;
@@ -57,7 +57,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
     }
 
     @Override
-    public InvoiceWithClientDataResponseDTO addInvoiceWithClient(InvoiceWithClientDTO invoiceWithClientDTO) throws WriteAccessException {
+    public InvoiceWithFullClientDataResponseDTO addInvoiceWithClient(InvoiceWithClientDTO invoiceWithClientDTO) throws WriteAccessException {
 
         utils.verifyClientDni(invoiceWithClientDTO.getClient().getDni());
 

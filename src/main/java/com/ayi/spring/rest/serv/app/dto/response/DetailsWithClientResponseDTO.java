@@ -18,7 +18,7 @@ import lombok.ToString;
         value = "Details Response",
         description = "The account details data provided by the server"
 )
-public class DetailsResponseDTO {
+public class DetailsWithClientResponseDTO {
 
     @ApiModelProperty(position = 1, notes = "Account details id")
     private Long idDetails;
@@ -31,6 +31,6 @@ public class DetailsResponseDTO {
 
     @ApiModelProperty(position = 3, notes = "The client")
     @JsonIgnoreProperties(value = "clientDetails")
-    private ClientFullResponseDTO client;
+    private ClientOnlyResponseDTO client;
 
 }

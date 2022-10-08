@@ -1,14 +1,8 @@
 package com.ayi.spring.rest.serv.app.controllers;
 
 import com.ayi.spring.rest.serv.app.dto.request.AddressDTO;
-import com.ayi.spring.rest.serv.app.dto.request.ClientFullDTO;
-import com.ayi.spring.rest.serv.app.dto.request.ClientOnlyDTO;
 import com.ayi.spring.rest.serv.app.dto.response.AddressResponseDTO;
-import com.ayi.spring.rest.serv.app.dto.response.ClientFullResponseDTO;
-import com.ayi.spring.rest.serv.app.dto.response.ClientOnlyResponseDTO;
-import com.ayi.spring.rest.serv.app.dto.response.InvoiceWithClientResponseDTO;
 import com.ayi.spring.rest.serv.app.exceptions.ReadAccessException;
-import com.ayi.spring.rest.serv.app.exceptions.WriteAccessException;
 import com.ayi.spring.rest.serv.app.services.IAddressService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
