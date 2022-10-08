@@ -1,10 +1,11 @@
 package com.ayi.spring.rest.serv.app.services.impl;
 
-import com.ayi.spring.rest.serv.app.dto.request.AddressDTO;
-import com.ayi.spring.rest.serv.app.dto.response.AddressResponseDTO;
+import com.ayi.spring.rest.serv.app.dto.request.address.AddressDTO;
+import com.ayi.spring.rest.serv.app.dto.response.address.AddressPagesResponseDTO;
+import com.ayi.spring.rest.serv.app.dto.response.address.AddressResponseDTO;
 import com.ayi.spring.rest.serv.app.entities.AddressEntity;
 import com.ayi.spring.rest.serv.app.entities.ClientEntity;
-import com.ayi.spring.rest.serv.app.exceptions.GenericException;
+import com.ayi.spring.rest.serv.app.exceptions.GenericAccessException;
 import com.ayi.spring.rest.serv.app.mappers.IAddressMapper;
 import com.ayi.spring.rest.serv.app.repositories.IAddressRepository;
 import com.ayi.spring.rest.serv.app.repositories.IClientRepository;
@@ -13,11 +14,11 @@ import com.ayi.spring.rest.serv.app.utils.Utils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.ayi.spring.rest.serv.app.constants.ExceptionStrings.READ_ACCESS_EXCEPTION_NOT_FOUND;
 
@@ -39,7 +40,7 @@ public class AddressServiceImpl implements IAddressService {
     Utils utils;
 
     @Override
-    public AddressResponseDTO addAddress(Long idClient, AddressDTO addressDTO) throws GenericException {
+    public AddressResponseDTO addAddress(Long idClient, AddressDTO addressDTO) throws GenericAccessException {
 
         utils.verifyClientId(idClient);
 
@@ -54,26 +55,28 @@ public class AddressServiceImpl implements IAddressService {
     }
 
     @Override
-    public List<AddressResponseDTO> findAllAddresses() throws GenericException {
+    public AddressPagesResponseDTO findAllAddressPages(Integer page, Integer size) throws GenericAccessException {
 
-        List<AddressResponseDTO> addressResponseDTOList = new ArrayList<>();
-        List<AddressEntity> addressEntityList = addressRepository.findAll();
+        AddressPagesResponseDTO addressPagesResponseDTO;
+        Pageable pageable = PageRequest.of(page, size);
 
-        if(addressEntityList == null) {
-            throw new GenericException(READ_ACCESS_EXCEPTION_NOT_FOUND);
+        Page<AddressEntity> addressEntityPages = addressRepository.findAll(pageable);
+
+        if(addressEntityPages != null && !addressEntityPages.isEmpty()) {
+            addressPagesResponseDTO = addressMapper.entityListToDtoList(addressEntityPages.getContent());
+            addressPagesResponseDTO.setSize(addressEntityPages.getSize());
+            addressPagesResponseDTO.setCurrentPage(addressEntityPages.getNumber() + 1);
+            addressPagesResponseDTO.setTotalPages(addressEntityPages.getTotalPages());
+            addressPagesResponseDTO.setTotalElements((int) addressEntityPages.getTotalElements());
+            return addressPagesResponseDTO;
+        } else {
+            throw new GenericAccessException(READ_ACCESS_EXCEPTION_NOT_FOUND);
         }
-
-        addressEntityList.forEach(address -> {
-            AddressResponseDTO addressResponseDTO = addressMapper.entityToDto(address);
-            addressResponseDTOList.add(addressResponseDTO);
-        });
-
-        return addressResponseDTOList;
 
     }
 
     @Override
-    public AddressResponseDTO findAddressById(Long idAddress) throws GenericException {
+    public AddressResponseDTO findAddressById(Long idAddress) throws GenericAccessException {
 
         utils.verifyAddressId(idAddress);
 
@@ -84,7 +87,7 @@ public class AddressServiceImpl implements IAddressService {
     }
 
     @Override
-    public AddressResponseDTO modifyAddress(Long idClient, Long idAddress, AddressDTO addressDTO) throws GenericException {
+    public AddressResponseDTO modifyAddress(Long idClient, Long idAddress, AddressDTO addressDTO) throws GenericAccessException {
 
         utils.verifyClientId(idClient);
         utils.verifyClientAddressId(idClient, idAddress);
@@ -98,7 +101,7 @@ public class AddressServiceImpl implements IAddressService {
     }
 
     @Override
-    public AddressResponseDTO removeAddress(Long idClient, Long idAddress) throws GenericException {
+    public AddressResponseDTO removeAddress(Long idClient, Long idAddress) throws GenericAccessException {
 
         utils.verifyClientId(idClient);
         utils.verifyClientAddressId(idClient, idAddress);
@@ -106,7 +109,7 @@ public class AddressServiceImpl implements IAddressService {
         AddressEntity addressEntity = addressRepository.findById(idAddress).get();
         AddressResponseDTO addressResponseDTO = addressMapper.entityToDto(addressEntity);
 
-        addressRepository.deleteById(idAddress);
+        addressRepository.delete(addressEntity);
 
         return addressResponseDTO;
 

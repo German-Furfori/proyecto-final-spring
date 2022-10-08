@@ -1,12 +1,12 @@
 package com.ayi.spring.rest.serv.app.controllers;
 
-import com.ayi.spring.rest.serv.app.dto.request.ClientFullDTO;
-import com.ayi.spring.rest.serv.app.dto.request.ClientOnlyDTO;
-import com.ayi.spring.rest.serv.app.dto.response.ClientInvoicesResponseDTO;
-import com.ayi.spring.rest.serv.app.dto.response.ClientFullResponseDTO;
-import com.ayi.spring.rest.serv.app.dto.response.ClientOnlyResponseDTO;
-import com.ayi.spring.rest.serv.app.exceptions.GenericException;
-import com.ayi.spring.rest.serv.app.exceptions.WriteAccessException;
+import com.ayi.spring.rest.serv.app.dto.request.client.ClientFullDTO;
+import com.ayi.spring.rest.serv.app.dto.request.client.ClientOnlyDTO;
+import com.ayi.spring.rest.serv.app.dto.response.client.ClientFullPagesResponseDTO;
+import com.ayi.spring.rest.serv.app.dto.response.client.ClientInvoicesResponseDTO;
+import com.ayi.spring.rest.serv.app.dto.response.client.ClientFullResponseDTO;
+import com.ayi.spring.rest.serv.app.dto.response.client.ClientOnlyResponseDTO;
+import com.ayi.spring.rest.serv.app.exceptions.GenericAccessException;
 import com.ayi.spring.rest.serv.app.services.IClientService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
@@ -59,7 +59,7 @@ public class ClientController {
 
         try {
             clientFullResponseDTO = clientService.addClient(clientFullDTO);
-        } catch (WriteAccessException e) {
+        } catch (GenericAccessException e) {
             response.put(ERROR_CODE, 1000);
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
@@ -69,13 +69,13 @@ public class ClientController {
     }
 
     @GetMapping(
-            value = "/getAllClients",
+            value = "/getAllClientPages/{page}/{size}",
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
     @ApiOperation(
-            value = "Retrieves data associated to all the clients",
+            value = "Retrieves data associated to all the clients paginated",
             httpMethod = "GET",
-            response = ClientFullResponseDTO.class
+            response = ClientFullPagesResponseDTO.class
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -86,21 +86,25 @@ public class ClientController {
                     code = 400,
                     message = "Describes errors on invalid payload received")
     })
-    public ResponseEntity<?> getAllClients() {
+    public ResponseEntity<?> getAllClientPages(
+            @ApiParam(value = "Page to display", required = true, example = "1")
+            @PathVariable(name = "page") Integer page,
+            @ApiParam(value = "Number of items per request", required = true, example = "1")
+            @PathVariable(name = "size") Integer size) {
 
         Map<String, Object> response = new HashMap<>();
 
-        List<ClientFullResponseDTO> clientFullResponseDTOList;
+        ClientFullPagesResponseDTO clientFullPagesResponseDTO;
 
         try {
-            clientFullResponseDTOList = clientService.findAllClients();
-        } catch (GenericException e) {
+            clientFullPagesResponseDTO = clientService.findAllClients(page - 1, size);
+        } catch (GenericAccessException e) {
             response.put(ERROR_CODE, 1001);
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
-        return ResponseEntity.ok(clientFullResponseDTOList);
+        return ResponseEntity.ok(clientFullPagesResponseDTO);
     }
 
     @GetMapping(
@@ -131,7 +135,7 @@ public class ClientController {
 
         try {
             clientFullResponseDTO = clientService.findClientById(id);
-        } catch (GenericException e) {
+        } catch (GenericAccessException e) {
             response.put(ERROR_CODE, 1002);
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
@@ -168,7 +172,7 @@ public class ClientController {
 
         try {
             clientInvoicesResponseDTO = clientService.findClientInvoices(id);
-        } catch (GenericException e) {
+        } catch (GenericAccessException e) {
             response.put(ERROR_CODE, 1003);
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
@@ -206,7 +210,7 @@ public class ClientController {
 
         try {
             clientOnlyResponseDTO = clientService.modifyClient(id, clientOnlyDTO);
-        } catch (GenericException e) {
+        } catch (GenericAccessException e) {
             response.put(ERROR_CODE, 1004);
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
@@ -243,7 +247,7 @@ public class ClientController {
 
         try {
             clientFullResponseDTO = clientService.removeClient(id);
-        } catch (GenericException e) {
+        } catch (GenericAccessException e) {
             response.put(ERROR_CODE, 1005);
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);

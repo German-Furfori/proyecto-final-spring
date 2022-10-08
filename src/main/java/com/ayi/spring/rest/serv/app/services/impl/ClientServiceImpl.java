@@ -1,20 +1,25 @@
 package com.ayi.spring.rest.serv.app.services.impl;
 
-import com.ayi.spring.rest.serv.app.dto.request.ClientFullDTO;
-import com.ayi.spring.rest.serv.app.dto.request.ClientOnlyDTO;
-import com.ayi.spring.rest.serv.app.dto.response.ClientInvoicesResponseDTO;
-import com.ayi.spring.rest.serv.app.dto.response.ClientFullResponseDTO;
-import com.ayi.spring.rest.serv.app.dto.response.ClientOnlyResponseDTO;
+import com.ayi.spring.rest.serv.app.dto.request.client.ClientFullDTO;
+import com.ayi.spring.rest.serv.app.dto.request.client.ClientOnlyDTO;
+import com.ayi.spring.rest.serv.app.dto.response.address.AddressPagesResponseDTO;
+import com.ayi.spring.rest.serv.app.dto.response.client.*;
+import com.ayi.spring.rest.serv.app.entities.AddressEntity;
 import com.ayi.spring.rest.serv.app.entities.ClientEntity;
-import com.ayi.spring.rest.serv.app.exceptions.GenericException;
-import com.ayi.spring.rest.serv.app.exceptions.WriteAccessException;
+import com.ayi.spring.rest.serv.app.entities.InvoiceEntity;
+import com.ayi.spring.rest.serv.app.exceptions.GenericAccessException;
 import com.ayi.spring.rest.serv.app.mappers.IClientMapper;
+import com.ayi.spring.rest.serv.app.mappers.IInvoiceMapper;
 import com.ayi.spring.rest.serv.app.repositories.IClientRepository;
+import com.ayi.spring.rest.serv.app.repositories.IInvoiceRepository;
 import com.ayi.spring.rest.serv.app.services.IClientService;
 import com.ayi.spring.rest.serv.app.utils.Utils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
@@ -32,12 +37,15 @@ public class ClientServiceImpl implements IClientService {
     private IClientRepository clientRepository;
 
     @Autowired
+    private IInvoiceRepository invoiceRepository;
+
+    @Autowired
     private IClientMapper clientMapper;
 
     private Utils utils;
 
     @Override
-    public ClientFullResponseDTO addClient(ClientFullDTO clientFullDTO) throws GenericException {
+    public ClientFullResponseDTO addClient(ClientFullDTO clientFullDTO) throws GenericAccessException {
 
         utils.verifyClientDni(clientFullDTO.getDni());
 
@@ -51,26 +59,28 @@ public class ClientServiceImpl implements IClientService {
     }
 
     @Override
-    public List<ClientFullResponseDTO> findAllClients() throws GenericException {
+    public ClientFullPagesResponseDTO findAllClients(Integer page, Integer size) throws GenericAccessException {
 
-        List<ClientFullResponseDTO> clientFullResponseDTOList = new ArrayList<>();
-        List<ClientEntity> clientEntityList = clientRepository.findAll();
+        ClientFullPagesResponseDTO clientFullPagesResponseDTO;
+        Pageable pageable = PageRequest.of(page, size);
 
-        if(clientEntityList == null) {
-            throw new GenericException(READ_ACCESS_EXCEPTION_NOT_FOUND);
+        Page<ClientEntity> clientEntityPages = clientRepository.findAll(pageable);
+
+        if(clientEntityPages != null && !clientEntityPages.isEmpty()) {
+            clientFullPagesResponseDTO = clientMapper.entityListToDtoList(clientEntityPages.getContent());
+            clientFullPagesResponseDTO.setSize(clientEntityPages.getSize());
+            clientFullPagesResponseDTO.setCurrentPage(clientEntityPages.getNumber() + 1);
+            clientFullPagesResponseDTO.setTotalPages(clientEntityPages.getTotalPages());
+            clientFullPagesResponseDTO.setTotalElements((int) clientEntityPages.getTotalElements());
+            return clientFullPagesResponseDTO;
+        } else {
+            throw new GenericAccessException(READ_ACCESS_EXCEPTION_NOT_FOUND);
         }
-
-        clientEntityList.forEach(client -> {
-            ClientFullResponseDTO clientFullResponseDTO = clientMapper.entityToFullDto(client);
-            clientFullResponseDTOList.add(clientFullResponseDTO);
-        });
-
-        return clientFullResponseDTOList;
 
     }
 
     @Override
-    public ClientFullResponseDTO findClientById(Long idClient) throws GenericException {
+    public ClientFullResponseDTO findClientById(Long idClient) throws GenericAccessException {
 
         utils.verifyClientId(idClient);
 
@@ -81,7 +91,7 @@ public class ClientServiceImpl implements IClientService {
     }
 
     @Override
-    public ClientInvoicesResponseDTO findClientInvoices(Long idClient) throws GenericException {
+    public ClientInvoicesResponseDTO findClientInvoices(Long idClient) throws GenericAccessException {
 
         utils.verifyClientId(idClient);
 
@@ -90,6 +100,9 @@ public class ClientServiceImpl implements IClientService {
 
         ClientInvoicesResponseDTO clientInvoicesResponseDTO = new ClientInvoicesResponseDTO(
                 idClient,
+                clientFullResponseDTO.getDni(),
+                clientFullResponseDTO.getFirstName(),
+                clientFullResponseDTO.getLastName(),
                 clientFullResponseDTO.getInvoiceList()
         );
 
@@ -98,7 +111,7 @@ public class ClientServiceImpl implements IClientService {
     }
 
     @Override
-    public ClientOnlyResponseDTO modifyClient(Long idClient, ClientOnlyDTO clientOnlyDTO) throws GenericException {
+    public ClientOnlyResponseDTO modifyClient(Long idClient, ClientOnlyDTO clientOnlyDTO) throws GenericAccessException {
 
         utils.verifyClientId(idClient);
         utils.verifyClientDni(clientOnlyDTO.getDni());
@@ -116,7 +129,7 @@ public class ClientServiceImpl implements IClientService {
     }
 
     @Override
-    public ClientFullResponseDTO removeClient(Long idClient) throws GenericException {
+    public ClientFullResponseDTO removeClient(Long idClient) throws GenericAccessException {
 
         utils.verifyClientId(idClient);
 

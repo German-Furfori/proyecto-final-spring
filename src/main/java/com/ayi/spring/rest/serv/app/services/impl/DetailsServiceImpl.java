@@ -1,9 +1,12 @@
 package com.ayi.spring.rest.serv.app.services.impl;
 
-import com.ayi.spring.rest.serv.app.dto.request.DetailsDTO;
-import com.ayi.spring.rest.serv.app.dto.response.DetailsWithClientResponseDTO;
+import com.ayi.spring.rest.serv.app.dto.request.details.DetailsDTO;
+import com.ayi.spring.rest.serv.app.dto.response.address.AddressPagesResponseDTO;
+import com.ayi.spring.rest.serv.app.dto.response.details.DetailsPagesResponseDTO;
+import com.ayi.spring.rest.serv.app.dto.response.details.DetailsWithClientResponseDTO;
+import com.ayi.spring.rest.serv.app.entities.AddressEntity;
 import com.ayi.spring.rest.serv.app.entities.DetailsEntity;
-import com.ayi.spring.rest.serv.app.exceptions.GenericException;
+import com.ayi.spring.rest.serv.app.exceptions.GenericAccessException;
 import com.ayi.spring.rest.serv.app.mappers.IDetailsMapper;
 import com.ayi.spring.rest.serv.app.repositories.IDetailsRepository;
 import com.ayi.spring.rest.serv.app.services.IDetailsService;
@@ -11,6 +14,9 @@ import com.ayi.spring.rest.serv.app.utils.Utils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,13 +40,13 @@ public class DetailsServiceImpl implements IDetailsService {
     Utils utils;
 
     @Override
-    public List<DetailsWithClientResponseDTO> findAllDetails() throws GenericException {
+    public DetailsPagesResponseDTO findAllDetailsPages(Integer page, Integer size) throws GenericAccessException {
 
-        List<DetailsWithClientResponseDTO> detailsWithClientResponseDTOList = new ArrayList<>();
+        /*List<DetailsWithClientResponseDTO> detailsWithClientResponseDTOList = new ArrayList<>();
         List<DetailsEntity> detailsEntityList = detailsRepository.findAll();
 
         if(detailsEntityList == null) {
-            throw new GenericException(READ_ACCESS_EXCEPTION_NOT_FOUND);
+            throw new GenericAccessException(READ_ACCESS_EXCEPTION_NOT_FOUND);
         }
 
         detailsEntityList.forEach(detail -> {
@@ -48,12 +54,28 @@ public class DetailsServiceImpl implements IDetailsService {
             detailsWithClientResponseDTOList.add(detailsWithClientResponseDTO);
         });
 
-        return detailsWithClientResponseDTOList;
+        return detailsWithClientResponseDTOList;*/
+
+        DetailsPagesResponseDTO detailsPagesResponseDTO;
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<DetailsEntity> detailsEntityPages = detailsRepository.findAll(pageable);
+
+        if(detailsEntityPages != null && !detailsEntityPages.isEmpty()) {
+            detailsPagesResponseDTO = detailsMapper.entityListToDtoList(detailsEntityPages.getContent());
+            detailsPagesResponseDTO.setSize(detailsEntityPages.getSize());
+            detailsPagesResponseDTO.setCurrentPage(detailsEntityPages.getNumber() + 1);
+            detailsPagesResponseDTO.setTotalPages(detailsEntityPages.getTotalPages());
+            detailsPagesResponseDTO.setTotalElements((int) detailsEntityPages.getTotalElements());
+            return detailsPagesResponseDTO;
+        } else {
+            throw new GenericAccessException(READ_ACCESS_EXCEPTION_NOT_FOUND);
+        }
 
     }
 
     @Override
-    public DetailsWithClientResponseDTO modifyDetails(Long idDetails, DetailsDTO detailsDTO) throws GenericException {
+    public DetailsWithClientResponseDTO modifyDetails(Long idDetails, DetailsDTO detailsDTO) throws GenericAccessException {
 
         utils.verifyDetailsId(idDetails);
 

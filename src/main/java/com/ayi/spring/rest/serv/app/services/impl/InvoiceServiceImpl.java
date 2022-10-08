@@ -1,13 +1,15 @@
 package com.ayi.spring.rest.serv.app.services.impl;
 
-import com.ayi.spring.rest.serv.app.dto.request.InvoiceWithClientDTO;
-import com.ayi.spring.rest.serv.app.dto.request.InvoiceWithoutClientDTO;
-import com.ayi.spring.rest.serv.app.dto.response.InvoiceWithFullClientDataResponseDTO;
-import com.ayi.spring.rest.serv.app.dto.response.InvoiceWithClientResponseDTO;
+import com.ayi.spring.rest.serv.app.dto.request.invoice.InvoiceWithClientDTO;
+import com.ayi.spring.rest.serv.app.dto.request.invoice.InvoiceWithoutClientDTO;
+import com.ayi.spring.rest.serv.app.dto.response.address.AddressPagesResponseDTO;
+import com.ayi.spring.rest.serv.app.dto.response.invoice.InvoicePagesResponseDTO;
+import com.ayi.spring.rest.serv.app.dto.response.invoice.InvoiceWithFullClientDataResponseDTO;
+import com.ayi.spring.rest.serv.app.dto.response.invoice.InvoiceWithClientResponseDTO;
+import com.ayi.spring.rest.serv.app.entities.AddressEntity;
 import com.ayi.spring.rest.serv.app.entities.ClientEntity;
 import com.ayi.spring.rest.serv.app.entities.InvoiceEntity;
-import com.ayi.spring.rest.serv.app.exceptions.GenericException;
-import com.ayi.spring.rest.serv.app.exceptions.WriteAccessException;
+import com.ayi.spring.rest.serv.app.exceptions.GenericAccessException;
 import com.ayi.spring.rest.serv.app.mappers.IInvoiceMapper;
 import com.ayi.spring.rest.serv.app.repositories.IClientRepository;
 import com.ayi.spring.rest.serv.app.repositories.IInvoiceRepository;
@@ -16,6 +18,9 @@ import com.ayi.spring.rest.serv.app.utils.Utils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,7 +47,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
     private Utils utils;
 
     @Override
-    public InvoiceWithClientResponseDTO addInvoiceWithoutClient(Long idClient, InvoiceWithoutClientDTO invoiceWithoutClientDTO) throws GenericException {
+    public InvoiceWithClientResponseDTO addInvoiceWithoutClient(Long idClient, InvoiceWithoutClientDTO invoiceWithoutClientDTO) throws GenericAccessException {
 
         utils.verifyClientId(idClient);
 
@@ -57,7 +62,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
     }
 
     @Override
-    public InvoiceWithFullClientDataResponseDTO addInvoiceWithClient(InvoiceWithClientDTO invoiceWithClientDTO) throws GenericException {
+    public InvoiceWithFullClientDataResponseDTO addInvoiceWithClient(InvoiceWithClientDTO invoiceWithClientDTO) throws GenericAccessException {
 
         utils.verifyClientDni(invoiceWithClientDTO.getClient().getDni());
 
@@ -71,13 +76,13 @@ public class InvoiceServiceImpl implements IInvoiceService {
     }
 
     @Override
-    public List<InvoiceWithClientResponseDTO> findAllInvoices() throws GenericException {
+    public InvoicePagesResponseDTO findAllInvoicePages(Integer page, Integer size) throws GenericAccessException {
 
-        List<InvoiceWithClientResponseDTO> invoiceWithClientResponseDTOList = new ArrayList<>();
+        /*List<InvoiceWithClientResponseDTO> invoiceWithClientResponseDTOList = new ArrayList<>();
         List<InvoiceEntity> invoiceEntityList = invoiceRepository.findAll();
 
         if(invoiceEntityList == null) {
-            throw new GenericException(READ_ACCESS_EXCEPTION_NOT_FOUND);
+            throw new GenericAccessException(READ_ACCESS_EXCEPTION_NOT_FOUND);
         }
 
         invoiceEntityList.forEach(invoice -> {
@@ -85,12 +90,28 @@ public class InvoiceServiceImpl implements IInvoiceService {
             invoiceWithClientResponseDTOList.add(invoiceWithClientResponseDTO);
         });
 
-        return invoiceWithClientResponseDTOList;
+        return invoiceWithClientResponseDTOList;*/
+
+        InvoicePagesResponseDTO invoicePagesResponseDTO;
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<InvoiceEntity> invoiceEntityPages = invoiceRepository.findAll(pageable);
+
+        if(invoiceEntityPages != null && !invoiceEntityPages.isEmpty()) {
+            invoicePagesResponseDTO = invoiceMapper.entityListToDtoList(invoiceEntityPages.getContent());
+            invoicePagesResponseDTO.setSize(invoiceEntityPages.getSize());
+            invoicePagesResponseDTO.setCurrentPage(invoiceEntityPages.getNumber() + 1);
+            invoicePagesResponseDTO.setTotalPages(invoiceEntityPages.getTotalPages());
+            invoicePagesResponseDTO.setTotalElements((int) invoiceEntityPages.getTotalElements());
+            return invoicePagesResponseDTO;
+        } else {
+            throw new GenericAccessException(READ_ACCESS_EXCEPTION_NOT_FOUND);
+        }
 
     }
 
     @Override
-    public InvoiceWithClientResponseDTO findInvoiceById(Long idInvoice) throws GenericException {
+    public InvoiceWithClientResponseDTO findInvoiceById(Long idInvoice) throws GenericAccessException {
 
         utils.verifyInvoiceId(idInvoice);
 
@@ -102,7 +123,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
 
 
     @Override
-    public InvoiceWithClientResponseDTO removeInvoice(Long idInvoice) throws GenericException {
+    public InvoiceWithClientResponseDTO removeInvoice(Long idInvoice) throws GenericAccessException {
 
         utils.verifyInvoiceId(idInvoice);
 

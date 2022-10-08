@@ -1,4 +1,4 @@
-package com.ayi.spring.rest.serv.app.dto.response;
+package com.ayi.spring.rest.serv.app.dto.response.client;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;

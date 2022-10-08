@@ -1,4 +1,4 @@
-package com.ayi.spring.rest.serv.app.dto.response;
+package com.ayi.spring.rest.serv.app.dto.response.details;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

@@ -1,8 +1,9 @@
 package com.ayi.spring.rest.serv.app.controllers;
 
-import com.ayi.spring.rest.serv.app.dto.request.DetailsDTO;
-import com.ayi.spring.rest.serv.app.dto.response.DetailsWithClientResponseDTO;
-import com.ayi.spring.rest.serv.app.exceptions.GenericException;
+import com.ayi.spring.rest.serv.app.dto.request.details.DetailsDTO;
+import com.ayi.spring.rest.serv.app.dto.response.details.DetailsPagesResponseDTO;
+import com.ayi.spring.rest.serv.app.dto.response.details.DetailsWithClientResponseDTO;
+import com.ayi.spring.rest.serv.app.exceptions.GenericAccessException;
 import com.ayi.spring.rest.serv.app.services.IDetailsService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
@@ -33,38 +34,42 @@ public class DetailsController {
     IDetailsService detailsService;
 
     @GetMapping(
-            value = "/getAllDetails",
+            value = "/getAllDetailsPages/{page}/{size}",
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
     @ApiOperation(
-            value = "Retrieves data associated to all the clients details",
+            value = "Retrieves data associated to all the clients details paginated",
             httpMethod = "GET",
             response = DetailsWithClientResponseDTO.class
     )
     @ApiResponses(value = {
             @ApiResponse(
                     code = 200,
-                    message = "Body content with the addresses information"
+                    message = "Body content with the clients details information"
             ),
             @ApiResponse(
                     code = 400,
                     message = "Describes errors on invalid payload received")
     })
-    public ResponseEntity<?> getAllDetails() {
+    public ResponseEntity<?> getAllDetailsPages(
+            @ApiParam(value = "Page to display", required = true, example = "1")
+            @PathVariable(name = "page") Integer page,
+            @ApiParam(value = "Number of items per request", required = true, example = "1")
+            @PathVariable(name = "size") Integer size) {
 
         Map<String, Object> response = new HashMap<>();
 
-        List<DetailsWithClientResponseDTO> detailsWithClientResponseDTOList;
+        DetailsPagesResponseDTO detailsPagesResponseDTO;
 
         try {
-            detailsWithClientResponseDTOList = detailsService.findAllDetails();
-        } catch (GenericException e) {
+            detailsPagesResponseDTO = detailsService.findAllDetailsPages(page, size);
+        } catch (GenericAccessException e) {
             response.put(ERROR_CODE, 4000);
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
-        return ResponseEntity.ok(detailsWithClientResponseDTOList);
+        return ResponseEntity.ok(detailsPagesResponseDTO);
     }
 
     @PatchMapping(
@@ -96,7 +101,7 @@ public class DetailsController {
 
         try {
             detailsWithClientResponseDTO = detailsService.modifyDetails(id, detailsDTO);
-        } catch (GenericException e) {
+        } catch (GenericAccessException e) {
             response.put(ERROR_CODE, 2003);
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);

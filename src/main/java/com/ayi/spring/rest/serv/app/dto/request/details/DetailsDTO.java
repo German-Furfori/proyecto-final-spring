@@ -1,4 +1,4 @@
-package com.ayi.spring.rest.serv.app.dto.request;
+package com.ayi.spring.rest.serv.app.dto.request.details;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -16,17 +16,16 @@ import javax.validation.constraints.NotNull;
 @Setter
 @ToString
 @ApiModel(
-        value = "Invoice Request without client",
-        description = "Data needed to create the invoice"
+        value = "Details Request",
+        description = "Data needed to create the client details"
 )
-public class InvoiceWithoutClientDTO {
+public class DetailsDTO {
 
-    @NotNull(message = "The description cannot be null")
+    @NotNull(message = "VIP information cannot be null")
     @ApiModelProperty(position = 1, required = true)
-    private String description;
+    private Boolean vipClient;
 
-    @NotNull(message = "The total amount cannot be null")
+    @NotNull(message = "The accumulated points cannot be null")
     @ApiModelProperty(position = 2, required = true)
-    private Double totalAmount;
-
+    private Long accumulatedPoints;
 }

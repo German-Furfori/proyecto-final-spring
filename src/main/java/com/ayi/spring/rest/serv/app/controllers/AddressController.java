@@ -1,8 +1,9 @@
 package com.ayi.spring.rest.serv.app.controllers;
 
-import com.ayi.spring.rest.serv.app.dto.request.AddressDTO;
-import com.ayi.spring.rest.serv.app.dto.response.AddressResponseDTO;
-import com.ayi.spring.rest.serv.app.exceptions.GenericException;
+import com.ayi.spring.rest.serv.app.dto.request.address.AddressDTO;
+import com.ayi.spring.rest.serv.app.dto.response.address.AddressPagesResponseDTO;
+import com.ayi.spring.rest.serv.app.dto.response.address.AddressResponseDTO;
+import com.ayi.spring.rest.serv.app.exceptions.GenericAccessException;
 import com.ayi.spring.rest.serv.app.services.IAddressService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
@@ -59,7 +60,7 @@ public class AddressController {
 
         try {
             addressResponseDTO = addressService.addAddress(id, addressDTO);
-        } catch (GenericException e) {
+        } catch (GenericAccessException e) {
             response.put(ERROR_CODE, 3000);
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
@@ -69,13 +70,13 @@ public class AddressController {
     }
 
     @GetMapping(
-            value = "/getAllAddresses",
+            value = "/getAllAddressPages/{page}/{size}",
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
     @ApiOperation(
-            value = "Retrieves data associated to all the addresses",
+            value = "Retrieves data associated to all the addresses paginated",
             httpMethod = "GET",
-            response = AddressResponseDTO.class
+            response = AddressPagesResponseDTO.class
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -86,21 +87,25 @@ public class AddressController {
                     code = 400,
                     message = "Describes errors on invalid payload received")
     })
-    public ResponseEntity<?> getAllAddresses() {
+    public ResponseEntity<?> getAllAddressPages(
+            @ApiParam(value = "Page to display", required = true, example = "1")
+            @PathVariable(name = "page") Integer page,
+            @ApiParam(value = "Number of items per request", required = true, example = "1")
+            @PathVariable(name = "size") Integer size) {
 
         Map<String, Object> response = new HashMap<>();
 
-        List<AddressResponseDTO> addressResponseDTOList;
+        AddressPagesResponseDTO addressPagesResponseDTO;
 
         try {
-            addressResponseDTOList = addressService.findAllAddresses();
-        } catch (GenericException e) {
+            addressPagesResponseDTO = addressService.findAllAddressPages(page - 1, size);
+        } catch (GenericAccessException e) {
             response.put(ERROR_CODE, 3001);
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
-        return ResponseEntity.ok(addressResponseDTOList);
+        return ResponseEntity.ok(addressPagesResponseDTO);
     }
 
     @GetMapping(
@@ -131,7 +136,7 @@ public class AddressController {
 
         try {
             addressResponseDTO = addressService.findAddressById(id);
-        } catch (GenericException e) {
+        } catch (GenericAccessException e) {
             response.put(ERROR_CODE, 3002);
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
@@ -171,7 +176,7 @@ public class AddressController {
 
         try {
             addressResponseDTO = addressService.modifyAddress(idClient, idAddress, addressDTO);
-        } catch (GenericException e) {
+        } catch (GenericAccessException e) {
             response.put(ERROR_CODE, 3004);
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
@@ -210,7 +215,7 @@ public class AddressController {
 
         try {
             addressResponseDTO = addressService.removeAddress(idClient, idAddress);
-        } catch (GenericException e) {
+        } catch (GenericAccessException e) {
             response.put(ERROR_CODE, 3004);
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);

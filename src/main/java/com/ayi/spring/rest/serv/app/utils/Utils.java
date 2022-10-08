@@ -4,8 +4,8 @@ import com.ayi.spring.rest.serv.app.entities.AddressEntity;
 import com.ayi.spring.rest.serv.app.entities.ClientEntity;
 import com.ayi.spring.rest.serv.app.entities.DetailsEntity;
 import com.ayi.spring.rest.serv.app.entities.InvoiceEntity;
-import com.ayi.spring.rest.serv.app.exceptions.GenericException;
-import com.ayi.spring.rest.serv.app.exceptions.WriteAccessException;
+import com.ayi.spring.rest.serv.app.exceptions.GenericAccessException;
+import com.ayi.spring.rest.serv.app.exceptions.DataBaseException;
 import com.ayi.spring.rest.serv.app.repositories.IAddressRepository;
 import com.ayi.spring.rest.serv.app.repositories.IClientRepository;
 import com.ayi.spring.rest.serv.app.repositories.IDetailsRepository;
@@ -13,6 +13,7 @@ import com.ayi.spring.rest.serv.app.repositories.IInvoiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -38,15 +39,15 @@ public class Utils {
      * Function to verify the integrity or existence of the client ID provided
      *
      * */
-    public void verifyClientId(Long idClient) throws GenericException {
+    public void verifyClientId(Long idClient) throws GenericAccessException {
         if(idClient == null || idClient <= 0) {
-            throw new GenericException(READ_ACCESS_EXCEPTION_INCORRECT_INPUT);
+            throw new GenericAccessException(READ_ACCESS_EXCEPTION_INCORRECT_INPUT);
         }
 
         Optional<ClientEntity> entity = clientRepository.findById(idClient);
 
         if(!entity.isPresent()) {
-            throw new GenericException(READ_ACCESS_EXCEPTION_ID_NOT_FOUND);
+            throw new GenericAccessException(READ_ACCESS_EXCEPTION_ID_NOT_FOUND);
         }
     }
 
@@ -55,15 +56,15 @@ public class Utils {
      * Function to verify the integrity or existence of the invoice ID provided
      *
      * */
-    public void verifyInvoiceId(Long idInvoice) throws GenericException {
+    public void verifyInvoiceId(Long idInvoice) throws GenericAccessException {
         if(idInvoice == null || idInvoice <= 0) {
-            throw new GenericException(READ_ACCESS_EXCEPTION_INCORRECT_INPUT);
+            throw new GenericAccessException(READ_ACCESS_EXCEPTION_INCORRECT_INPUT);
         }
 
         Optional<InvoiceEntity> entity = invoiceRepository.findById(idInvoice);
 
         if(!entity.isPresent()) {
-            throw new GenericException(READ_ACCESS_EXCEPTION_ID_NOT_FOUND);
+            throw new GenericAccessException(READ_ACCESS_EXCEPTION_ID_NOT_FOUND);
         }
     }
 
@@ -72,15 +73,15 @@ public class Utils {
      * Function to verify the integrity or existence of the address ID provided
      *
      * */
-    public void verifyAddressId(Long idAddress) throws GenericException {
+    public void verifyAddressId(Long idAddress) throws GenericAccessException {
         if(idAddress == null || idAddress <= 0) {
-            throw new GenericException(READ_ACCESS_EXCEPTION_INCORRECT_INPUT);
+            throw new GenericAccessException(READ_ACCESS_EXCEPTION_INCORRECT_INPUT);
         }
 
         Optional<AddressEntity> entity = addressRepository.findById(idAddress);
 
         if(!entity.isPresent()) {
-            throw new GenericException(READ_ACCESS_EXCEPTION_ID_NOT_FOUND);
+            throw new GenericAccessException(READ_ACCESS_EXCEPTION_ID_NOT_FOUND);
         }
     }
 
@@ -89,15 +90,15 @@ public class Utils {
      * Function to verify the integrity or existence of the details ID provided
      *
      * */
-    public void verifyDetailsId(Long idDetails) throws GenericException {
+    public void verifyDetailsId(Long idDetails) throws GenericAccessException {
         if(idDetails == null || idDetails <= 0) {
-            throw new GenericException(READ_ACCESS_EXCEPTION_INCORRECT_INPUT);
+            throw new GenericAccessException(READ_ACCESS_EXCEPTION_INCORRECT_INPUT);
         }
 
         Optional<DetailsEntity> entity = detailsRepository.findById(idDetails);
 
         if(!entity.isPresent()) {
-            throw new GenericException(READ_ACCESS_EXCEPTION_ID_NOT_FOUND);
+            throw new GenericAccessException(READ_ACCESS_EXCEPTION_ID_NOT_FOUND);
         }
     }
 
@@ -107,22 +108,18 @@ public class Utils {
      * The ID Client must be verified before using this method
      *
      * */
-    public void verifyClientAddressId(Long idClient, Long idAddress) throws GenericException {
-        AtomicReference<Boolean> addressExistence = new AtomicReference<>(false);
+    public void verifyClientAddressId(Long idClient, Long idAddress) throws GenericAccessException {
 
         if(idAddress == null || idClient == null || idAddress <= 0 || idClient <= 0) {
-            throw new GenericException(READ_ACCESS_EXCEPTION_INCORRECT_INPUT);
+            throw new GenericAccessException(READ_ACCESS_EXCEPTION_INCORRECT_INPUT);
         }
 
-        ClientEntity clientEntity = clientRepository.findById(idClient).get();
+        Optional<AddressEntity> addressEntity = addressRepository.findById(idAddress);
 
-        clientEntity.getAddressList().forEach(addressEntity -> {
-            if(addressEntity.getIdAddress() == idAddress) addressExistence.set(true);
-        });
-
-        if(!addressExistence.get()) {
-            throw new GenericException(READ_ACCESS_EXCEPTION_CLIENT_ADDRESS_NOT_FOUND);
+        if(!addressEntity.isPresent() || addressEntity.get().getClient().getIdClient() != idClient) {
+            throw new GenericAccessException(READ_ACCESS_EXCEPTION_ID_NOT_FOUND);
         }
+
     }
 
     /**
@@ -130,11 +127,11 @@ public class Utils {
      * Function to verify existence of the DNI provided
      *
      * */
-    public void verifyClientDni(String dni) throws WriteAccessException {
+    public void verifyClientDni(String dni) throws GenericAccessException {
         Optional<ClientEntity> clientOptional = clientRepository.findByDni(dni);
 
         if(clientOptional.isPresent()) {
-            throw new WriteAccessException(WRITE_ACCESS_EXCEPTION_DNI);
+            throw new GenericAccessException(WRITE_ACCESS_EXCEPTION_DNI);
         }
     }
 

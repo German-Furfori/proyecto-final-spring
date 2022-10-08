@@ -1,5 +1,8 @@
-package com.ayi.spring.rest.serv.app.dto.response;
+package com.ayi.spring.rest.serv.app.dto.response.client;
 
+import com.ayi.spring.rest.serv.app.dto.response.details.DetailsOnlyResponseDTO;
+import com.ayi.spring.rest.serv.app.dto.response.invoice.InvoiceWithFullClientDataResponseDTO;
+import com.ayi.spring.rest.serv.app.dto.response.address.AddressResponseDTO;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

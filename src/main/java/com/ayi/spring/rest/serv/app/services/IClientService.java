@@ -1,25 +1,25 @@
 package com.ayi.spring.rest.serv.app.services;
 
-import com.ayi.spring.rest.serv.app.dto.request.ClientFullDTO;
-import com.ayi.spring.rest.serv.app.dto.request.ClientOnlyDTO;
-import com.ayi.spring.rest.serv.app.dto.response.ClientInvoicesResponseDTO;
-import com.ayi.spring.rest.serv.app.dto.response.ClientFullResponseDTO;
-import com.ayi.spring.rest.serv.app.dto.response.ClientOnlyResponseDTO;
-import com.ayi.spring.rest.serv.app.exceptions.GenericException;
-import com.ayi.spring.rest.serv.app.exceptions.WriteAccessException;
+import com.ayi.spring.rest.serv.app.dto.request.client.ClientFullDTO;
+import com.ayi.spring.rest.serv.app.dto.request.client.ClientOnlyDTO;
+import com.ayi.spring.rest.serv.app.dto.response.client.ClientFullPagesResponseDTO;
+import com.ayi.spring.rest.serv.app.dto.response.client.ClientInvoicesResponseDTO;
+import com.ayi.spring.rest.serv.app.dto.response.client.ClientFullResponseDTO;
+import com.ayi.spring.rest.serv.app.dto.response.client.ClientOnlyResponseDTO;
+import com.ayi.spring.rest.serv.app.exceptions.GenericAccessException;
 
 import java.util.List;
 
 public interface IClientService {
-    ClientFullResponseDTO addClient(ClientFullDTO clientFullDTO) throws GenericException;
+    ClientFullResponseDTO addClient(ClientFullDTO clientFullDTO) throws GenericAccessException;
 
-    List<ClientFullResponseDTO> findAllClients() throws GenericException;
+    ClientFullPagesResponseDTO findAllClients(Integer page, Integer size) throws GenericAccessException;
 
-    ClientFullResponseDTO findClientById(Long idClient) throws GenericException;
+    ClientFullResponseDTO findClientById(Long idClient) throws GenericAccessException;
 
-    ClientInvoicesResponseDTO findClientInvoices(Long idClient) throws GenericException;
+    ClientInvoicesResponseDTO findClientInvoices(Long idClient) throws GenericAccessException;
 
-    ClientOnlyResponseDTO modifyClient(Long id, ClientOnlyDTO clientOnlyDTO) throws GenericException;
+    ClientOnlyResponseDTO modifyClient(Long id, ClientOnlyDTO clientOnlyDTO) throws GenericAccessException;
 
-    ClientFullResponseDTO removeClient(Long id) throws GenericException;
+    ClientFullResponseDTO removeClient(Long id) throws GenericAccessException;
 }

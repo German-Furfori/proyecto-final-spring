@@ -1,14 +1,15 @@
 package com.ayi.spring.rest.serv.app.services;
 
-import com.ayi.spring.rest.serv.app.dto.request.DetailsDTO;
-import com.ayi.spring.rest.serv.app.dto.response.DetailsWithClientResponseDTO;
-import com.ayi.spring.rest.serv.app.exceptions.GenericException;
+import com.ayi.spring.rest.serv.app.dto.request.details.DetailsDTO;
+import com.ayi.spring.rest.serv.app.dto.response.details.DetailsPagesResponseDTO;
+import com.ayi.spring.rest.serv.app.dto.response.details.DetailsWithClientResponseDTO;
+import com.ayi.spring.rest.serv.app.exceptions.GenericAccessException;
 
 import java.util.List;
 
 public interface IDetailsService {
 
-    List<DetailsWithClientResponseDTO> findAllDetails() throws GenericException;
+    DetailsPagesResponseDTO findAllDetailsPages(Integer page, Integer size) throws GenericAccessException;
 
-    DetailsWithClientResponseDTO modifyDetails(Long id, DetailsDTO detailsDTO) throws GenericException;
+    DetailsWithClientResponseDTO modifyDetails(Long id, DetailsDTO detailsDTO) throws GenericAccessException;
 }

@@ -42,7 +42,7 @@ public class AddressEntity {
     @Column(name = "country", nullable = false, length = 50)
     private String country;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "client_fk", referencedColumnName = "id_client")
     private ClientEntity client;
 }

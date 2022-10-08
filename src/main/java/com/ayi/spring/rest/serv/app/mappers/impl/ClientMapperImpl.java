@@ -1,15 +1,18 @@
 package com.ayi.spring.rest.serv.app.mappers.impl;
 
-import com.ayi.spring.rest.serv.app.dto.request.ClientFullDTO;
-import com.ayi.spring.rest.serv.app.dto.request.ClientOnlyDTO;
-import com.ayi.spring.rest.serv.app.dto.response.ClientFullResponseDTO;
-import com.ayi.spring.rest.serv.app.dto.response.ClientOnlyResponseDTO;
-import com.ayi.spring.rest.serv.app.entities.AddressEntity;
+import com.ayi.spring.rest.serv.app.dto.request.client.ClientFullDTO;
+import com.ayi.spring.rest.serv.app.dto.request.client.ClientOnlyDTO;
+import com.ayi.spring.rest.serv.app.dto.response.client.ClientFullPagesResponseDTO;
+import com.ayi.spring.rest.serv.app.dto.response.client.ClientFullResponseDTO;
+import com.ayi.spring.rest.serv.app.dto.response.client.ClientOnlyResponseDTO;
 import com.ayi.spring.rest.serv.app.entities.ClientEntity;
 import com.ayi.spring.rest.serv.app.mappers.IClientMapper;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @AllArgsConstructor
@@ -47,6 +50,21 @@ public class ClientMapperImpl implements IClientMapper {
         });
 
         return clientEntity;
+    }
+
+    @Override
+    public ClientFullPagesResponseDTO entityListToDtoList(List<ClientEntity> clientEntityList) {
+        ClientFullPagesResponseDTO clientFullPagesResponseDTO = new ClientFullPagesResponseDTO();
+        List<ClientFullResponseDTO> clientFullResponseDTOList = new ArrayList<>();
+
+        clientEntityList.forEach(clientEntity -> {
+            ClientFullResponseDTO clientFullResponseDTO = new ClientFullResponseDTO();
+            modelMapper.map(clientEntity, clientFullResponseDTO);
+            clientFullResponseDTOList.add(clientFullResponseDTO);
+        });
+
+        clientFullPagesResponseDTO.setClientFullResponseDTOList(clientFullResponseDTOList);
+        return clientFullPagesResponseDTO;
     }
 
     @Override
