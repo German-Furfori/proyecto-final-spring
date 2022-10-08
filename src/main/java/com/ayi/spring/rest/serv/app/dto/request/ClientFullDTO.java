@@ -40,6 +40,6 @@ public class ClientFullDTO {
 
     @NotNull(message = "Client addresses cannot be null")
     @ApiModelProperty(position = 5, required = true)
-    private List<AddressDTO> address;
+    private List<AddressDTO> addressList;
 
 }

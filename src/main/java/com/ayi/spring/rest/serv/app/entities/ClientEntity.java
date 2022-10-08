@@ -1,6 +1,5 @@
 package com.ayi.spring.rest.serv.app.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -42,6 +41,6 @@ public class ClientEntity {
     @OneToMany(mappedBy = "client")
     private List<InvoiceEntity> invoiceList;
 
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "client", cascade = CascadeType.PERSIST)
     private List<AddressEntity> addressList;
 }

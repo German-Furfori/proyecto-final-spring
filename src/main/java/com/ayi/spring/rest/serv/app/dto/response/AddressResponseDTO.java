@@ -49,5 +49,5 @@ public class AddressResponseDTO {
 
     @ApiModelProperty(position = 10, notes = "Client data list")
     @JsonIgnoreProperties(value = "addressList")
-    private ClientFullResponseDTO client;
+    private ClientOnlyResponseDTO client;
 }

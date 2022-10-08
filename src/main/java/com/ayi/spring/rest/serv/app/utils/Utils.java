@@ -1,15 +1,18 @@
 package com.ayi.spring.rest.serv.app.utils;
 
+import com.ayi.spring.rest.serv.app.entities.AddressEntity;
 import com.ayi.spring.rest.serv.app.entities.ClientEntity;
 import com.ayi.spring.rest.serv.app.entities.InvoiceEntity;
 import com.ayi.spring.rest.serv.app.exceptions.ReadAccessException;
 import com.ayi.spring.rest.serv.app.exceptions.WriteAccessException;
+import com.ayi.spring.rest.serv.app.repositories.IAddressRepository;
 import com.ayi.spring.rest.serv.app.repositories.IClientRepository;
 import com.ayi.spring.rest.serv.app.repositories.IInvoiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static com.ayi.spring.rest.serv.app.constants.ExceptionStrings.*;
 
@@ -21,6 +24,9 @@ public class Utils {
 
     @Autowired
     IInvoiceRepository invoiceRepository;
+
+    @Autowired
+    IAddressRepository addressRepository;
 
     /**
      *
@@ -41,7 +47,7 @@ public class Utils {
 
     /**
      *
-     * Function to verify the integrity or existence of the ID invoice provided
+     * Function to verify the integrity or existence of the invoice ID provided
      *
      * */
     public void verifyInvoiceId(Long idInvoice) throws ReadAccessException {
@@ -53,6 +59,47 @@ public class Utils {
 
         if(!entity.isPresent()) {
             throw new ReadAccessException(READ_ACCESS_EXCEPTION_ID_NOT_FOUND);
+        }
+    }
+
+    /**
+     *
+     * Function to verify the integrity or existence of the address ID provided
+     *
+     * */
+    public void verifyAddressId(Long idAddress) throws ReadAccessException {
+        if(idAddress == null || idAddress <= 0) {
+            throw new ReadAccessException(READ_ACCESS_EXCEPTION_INCORRECT_INPUT);
+        }
+
+        Optional<AddressEntity> entity = addressRepository.findById(idAddress);
+
+        if(!entity.isPresent()) {
+            throw new ReadAccessException(READ_ACCESS_EXCEPTION_ID_NOT_FOUND);
+        }
+    }
+
+    /**
+     *
+     * Function to verify the integrity or existence of the client address ID provided.
+     * The ID Client must be verified before using this method
+     *
+     * */
+    public void verifyClientAddressId(Long idClient, Long idAddress) throws ReadAccessException {
+        AtomicReference<Boolean> addressExistence = new AtomicReference<>(false);
+
+        if(idAddress == null || idClient == null || idAddress <= 0 || idClient <= 0) {
+            throw new ReadAccessException(READ_ACCESS_EXCEPTION_INCORRECT_INPUT);
+        }
+
+        ClientEntity clientEntity = clientRepository.findById(idClient).get();
+
+        clientEntity.getAddressList().forEach(addressEntity -> {
+            if(addressEntity.getIdAddress() == idAddress) addressExistence.set(true);
+        });
+
+        if(!addressExistence.get()) {
+            throw new ReadAccessException(READ_ACCESS_EXCEPTION_CLIENT_ADDRESS_NOT_FOUND);
         }
     }
 

@@ -184,7 +184,7 @@ public class InvoiceController {
     @ApiResponses(value = {
             @ApiResponse(
                     code = 200,
-                    message = "Body content with the invoice information"
+                    message = "Body content with the deleted invoice information"
             ),
             @ApiResponse(
                     code = 400,

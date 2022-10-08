@@ -8,13 +8,13 @@ import com.ayi.spring.rest.serv.app.exceptions.WriteAccessException;
 import java.util.List;
 
 public interface IAddressService {
+    AddressResponseDTO addAddress(Long idClient, AddressDTO addressDTO) throws ReadAccessException;
+
     List<AddressResponseDTO> findAllAddresses() throws ReadAccessException;
 
     AddressResponseDTO findAddressById(Long id) throws ReadAccessException;
 
-    AddressResponseDTO addAddress(AddressDTO addressDTO) throws WriteAccessException;
+    AddressResponseDTO modifyAddress(Long idClient, Long idAddress, AddressDTO addressDTO) throws ReadAccessException;
 
-    AddressResponseDTO removeAddressById(Long id) throws WriteAccessException;
-
-    AddressResponseDTO modifyAddress(Long id, AddressDTO addressDTO) throws WriteAccessException;
+    AddressResponseDTO removeAddress(Long idClient, Long idAddress) throws ReadAccessException;
 }

@@ -4,6 +4,7 @@ import com.ayi.spring.rest.serv.app.dto.request.ClientFullDTO;
 import com.ayi.spring.rest.serv.app.dto.request.ClientOnlyDTO;
 import com.ayi.spring.rest.serv.app.dto.response.ClientFullResponseDTO;
 import com.ayi.spring.rest.serv.app.dto.response.ClientOnlyResponseDTO;
+import com.ayi.spring.rest.serv.app.entities.AddressEntity;
 import com.ayi.spring.rest.serv.app.entities.ClientEntity;
 import com.ayi.spring.rest.serv.app.mappers.IClientMapper;
 import lombok.AllArgsConstructor;

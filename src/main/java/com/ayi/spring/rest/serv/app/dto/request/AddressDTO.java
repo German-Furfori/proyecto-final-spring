@@ -52,8 +52,4 @@ public class AddressDTO {
     @ApiModelProperty(position = 8, required = true)
     private String country;
 
-    @NotNull(message = "The client cannot be null")
-    @ApiModelProperty(hidden = true)
-    private ClientOnlyDTO client;
-
 }
