@@ -44,7 +44,7 @@ public class Utils {
         Optional<ClientEntity> entity = clientRepository.findById(idClient);
 
         if(!entity.isPresent()) {
-            throw new RepositoryAccessException(READ_ACCESS_EXCEPTION_ID_NOT_FOUND);
+            throw new RepositoryAccessException(READ_ACCESS_EXCEPTION_CLIENT_ID_NOT_FOUND);
         }
     }
 
@@ -61,7 +61,7 @@ public class Utils {
         Optional<InvoiceEntity> entity = invoiceRepository.findById(idInvoice);
 
         if(!entity.isPresent()) {
-            throw new RepositoryAccessException(READ_ACCESS_EXCEPTION_ID_NOT_FOUND);
+            throw new RepositoryAccessException(READ_ACCESS_EXCEPTION_INVOICE_ID_NOT_FOUND);
         }
     }
 
@@ -78,7 +78,7 @@ public class Utils {
         Optional<AddressEntity> entity = addressRepository.findById(idAddress);
 
         if(!entity.isPresent()) {
-            throw new RepositoryAccessException(READ_ACCESS_EXCEPTION_ID_NOT_FOUND);
+            throw new RepositoryAccessException(READ_ACCESS_EXCEPTION_ADDRESS_ID_NOT_FOUND);
         }
     }
 
@@ -95,7 +95,7 @@ public class Utils {
         Optional<DetailsEntity> entity = detailsRepository.findById(idDetails);
 
         if(!entity.isPresent()) {
-            throw new RepositoryAccessException(READ_ACCESS_EXCEPTION_ID_NOT_FOUND);
+            throw new RepositoryAccessException(READ_ACCESS_EXCEPTION_DETAILS_ID_NOT_FOUND);
         }
     }
 
@@ -114,7 +114,7 @@ public class Utils {
         Optional<AddressEntity> addressEntity = addressRepository.findById(idAddress);
 
         if(!addressEntity.isPresent()) {
-            throw new RepositoryAccessException(READ_ACCESS_EXCEPTION_ID_NOT_FOUND);
+            throw new RepositoryAccessException(READ_ACCESS_EXCEPTION_ADDRESS_ID_NOT_FOUND);
         } else if(addressEntity.get().getClient().getIdClient() != idClient) {
             throw new RepositoryAccessException(READ_ACCESS_EXCEPTION_CLIENT_ADDRESS_NOT_FOUND);
         }
