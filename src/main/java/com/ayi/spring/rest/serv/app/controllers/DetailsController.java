@@ -72,13 +72,13 @@ public class DetailsController {
         return ResponseEntity.ok(detailsPagesResponseDTO);
     }
 
-    @PatchMapping(
+    @PutMapping(
             value = "/updateDetails/{id}",
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
     @ApiOperation(
             value = "Updates data associated to the client details",
-            httpMethod = "PATCH",
+            httpMethod = "PUT",
             response = DetailsWithClientResponseDTO.class
     )
     @ApiResponses(value = {

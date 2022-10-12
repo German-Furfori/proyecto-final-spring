@@ -181,13 +181,13 @@ public class ClientController {
         return ResponseEntity.ok(clientInvoicesResponseDTO);
     }
 
-    @PatchMapping(
+    @PutMapping(
             value = "/updateClient/{id}",
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
     @ApiOperation(
             value = "Retrieves data associated to the client updated",
-            httpMethod = "PATCH",
+            httpMethod = "PUT",
             response = ClientFullResponseDTO.class
     )
     @ApiResponses(value = {

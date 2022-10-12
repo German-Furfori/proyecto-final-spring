@@ -145,13 +145,13 @@ public class AddressController {
         return ResponseEntity.ok(addressResponseDTO);
     }
 
-    @PatchMapping(
+    @PutMapping(
             value = "/updateAddress/{idClient}/{idAddress}",
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
     @ApiOperation(
             value = "Retrieves data associated to the client address updated",
-            httpMethod = "PATCH",
+            httpMethod = "PUT",
             response = AddressResponseDTO.class
     )
     @ApiResponses(value = {
