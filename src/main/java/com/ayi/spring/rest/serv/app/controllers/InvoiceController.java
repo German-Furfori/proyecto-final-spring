@@ -5,7 +5,7 @@ import com.ayi.spring.rest.serv.app.dto.request.invoice.InvoiceWithoutClientDTO;
 import com.ayi.spring.rest.serv.app.dto.response.invoice.InvoicePagesResponseDTO;
 import com.ayi.spring.rest.serv.app.dto.response.invoice.InvoiceWithFullClientDataResponseDTO;
 import com.ayi.spring.rest.serv.app.dto.response.invoice.InvoiceWithClientResponseDTO;
-import com.ayi.spring.rest.serv.app.exceptions.GenericAccessException;
+import com.ayi.spring.rest.serv.app.exceptions.RepositoryAccessException;
 import com.ayi.spring.rest.serv.app.services.IInvoiceService;
 import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
@@ -15,8 +15,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static com.ayi.spring.rest.serv.app.constants.HashMapStrings.ERROR_CODE;
@@ -50,7 +50,7 @@ public class InvoiceController {
     public ResponseEntity<?> createInvoiceWithoutClient(
             @ApiParam(name = "id", required = true, value = "Client Id", example = "1")
             @PathVariable("id") Long id,
-            @RequestBody InvoiceWithoutClientDTO invoiceWithoutClientDTO) {
+            @Valid @RequestBody InvoiceWithoutClientDTO invoiceWithoutClientDTO) {
 
         Map<String, Object> response = new HashMap<>();
 
@@ -58,8 +58,8 @@ public class InvoiceController {
 
         try {
             invoiceWithClientResponseDTO = invoiceService.addInvoiceWithoutClient(id, invoiceWithoutClientDTO);
-        } catch (GenericAccessException e) {
-            response.put(ERROR_CODE, 2000);
+        } catch (RepositoryAccessException e) {
+            response.put(ERROR_CODE, HttpStatus.NOT_ACCEPTABLE.value());
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
         }
@@ -83,7 +83,7 @@ public class InvoiceController {
                     message = "Describes errors on invalid payload received"
             )
     })
-    public ResponseEntity<?> createInvoiceWithClient(@RequestBody InvoiceWithClientDTO invoiceWithClientDTO) {
+    public ResponseEntity<?> createInvoiceWithClient(@Valid @RequestBody InvoiceWithClientDTO invoiceWithClientDTO) {
 
         Map<String, Object> response = new HashMap<>();
 
@@ -91,8 +91,8 @@ public class InvoiceController {
 
         try {
             invoiceWithFullClientDataResponseDTO = invoiceService.addInvoiceWithClient(invoiceWithClientDTO);
-        } catch (GenericAccessException e) {
-            response.put(ERROR_CODE, 2001);
+        } catch (RepositoryAccessException e) {
+            response.put(ERROR_CODE, HttpStatus.NOT_FOUND.value());
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
         }
@@ -130,8 +130,8 @@ public class InvoiceController {
 
         try {
             invoicePagesResponseDTO = invoiceService.findAllInvoicePages(page - 1, size);
-        } catch (GenericAccessException e) {
-            response.put(ERROR_CODE, 2002);
+        } catch (RepositoryAccessException e) {
+            response.put(ERROR_CODE, HttpStatus.NOT_FOUND.value());
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
@@ -167,8 +167,8 @@ public class InvoiceController {
 
         try {
             invoiceWithClientResponseDTO = invoiceService.findInvoiceById(id);
-        } catch (GenericAccessException e) {
-            response.put(ERROR_CODE, 2003);
+        } catch (RepositoryAccessException e) {
+            response.put(ERROR_CODE, HttpStatus.NOT_FOUND.value());
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
@@ -204,8 +204,8 @@ public class InvoiceController {
 
         try {
             invoiceWithClientResponseDTO = invoiceService.removeInvoice(id);
-        } catch (GenericAccessException e) {
-            response.put(ERROR_CODE, 2004);
+        } catch (RepositoryAccessException e) {
+            response.put(ERROR_CODE, HttpStatus.NOT_FOUND.value());
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }

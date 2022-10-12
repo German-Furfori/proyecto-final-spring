@@ -1,12 +1,10 @@
 package com.ayi.spring.rest.serv.app.services.impl;
 
 import com.ayi.spring.rest.serv.app.dto.request.details.DetailsDTO;
-import com.ayi.spring.rest.serv.app.dto.response.address.AddressPagesResponseDTO;
 import com.ayi.spring.rest.serv.app.dto.response.details.DetailsPagesResponseDTO;
 import com.ayi.spring.rest.serv.app.dto.response.details.DetailsWithClientResponseDTO;
-import com.ayi.spring.rest.serv.app.entities.AddressEntity;
 import com.ayi.spring.rest.serv.app.entities.DetailsEntity;
-import com.ayi.spring.rest.serv.app.exceptions.GenericAccessException;
+import com.ayi.spring.rest.serv.app.exceptions.RepositoryAccessException;
 import com.ayi.spring.rest.serv.app.mappers.IDetailsMapper;
 import com.ayi.spring.rest.serv.app.repositories.IDetailsRepository;
 import com.ayi.spring.rest.serv.app.services.IDetailsService;
@@ -19,9 +17,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.ayi.spring.rest.serv.app.constants.ExceptionStrings.READ_ACCESS_EXCEPTION_NOT_FOUND;
 
@@ -40,7 +35,7 @@ public class DetailsServiceImpl implements IDetailsService {
     Utils utils;
 
     @Override
-    public DetailsPagesResponseDTO findAllDetailsPages(Integer page, Integer size) throws GenericAccessException {
+    public DetailsPagesResponseDTO findAllDetailsPages(Integer page, Integer size) throws RepositoryAccessException {
 
         /*List<DetailsWithClientResponseDTO> detailsWithClientResponseDTOList = new ArrayList<>();
         List<DetailsEntity> detailsEntityList = detailsRepository.findAll();
@@ -69,13 +64,13 @@ public class DetailsServiceImpl implements IDetailsService {
             detailsPagesResponseDTO.setTotalElements((int) detailsEntityPages.getTotalElements());
             return detailsPagesResponseDTO;
         } else {
-            throw new GenericAccessException(READ_ACCESS_EXCEPTION_NOT_FOUND);
+            throw new RepositoryAccessException(READ_ACCESS_EXCEPTION_NOT_FOUND);
         }
 
     }
 
     @Override
-    public DetailsWithClientResponseDTO modifyDetails(Long idDetails, DetailsDTO detailsDTO) throws GenericAccessException {
+    public DetailsWithClientResponseDTO modifyDetails(Long idDetails, DetailsDTO detailsDTO) throws RepositoryAccessException {
 
         utils.verifyDetailsId(idDetails);
 

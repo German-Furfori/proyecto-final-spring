@@ -2,14 +2,10 @@ package com.ayi.spring.rest.serv.app.services.impl;
 
 import com.ayi.spring.rest.serv.app.dto.request.client.ClientFullDTO;
 import com.ayi.spring.rest.serv.app.dto.request.client.ClientOnlyDTO;
-import com.ayi.spring.rest.serv.app.dto.response.address.AddressPagesResponseDTO;
 import com.ayi.spring.rest.serv.app.dto.response.client.*;
-import com.ayi.spring.rest.serv.app.entities.AddressEntity;
 import com.ayi.spring.rest.serv.app.entities.ClientEntity;
-import com.ayi.spring.rest.serv.app.entities.InvoiceEntity;
-import com.ayi.spring.rest.serv.app.exceptions.GenericAccessException;
+import com.ayi.spring.rest.serv.app.exceptions.RepositoryAccessException;
 import com.ayi.spring.rest.serv.app.mappers.IClientMapper;
-import com.ayi.spring.rest.serv.app.mappers.IInvoiceMapper;
 import com.ayi.spring.rest.serv.app.repositories.IClientRepository;
 import com.ayi.spring.rest.serv.app.repositories.IInvoiceRepository;
 import com.ayi.spring.rest.serv.app.services.IClientService;
@@ -22,8 +18,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.ayi.spring.rest.serv.app.constants.ExceptionStrings.*;
 
@@ -45,11 +39,11 @@ public class ClientServiceImpl implements IClientService {
     private Utils utils;
 
     @Override
-    public ClientFullResponseDTO addClient(ClientFullDTO clientFullDTO) throws GenericAccessException {
+    public ClientFullResponseDTO addClient(ClientFullDTO clientFullDTO) throws RepositoryAccessException {
 
         utils.verifyClientDni(clientFullDTO.getDni());
 
-        ClientEntity clientEntity = clientMapper.fullDtoToEntity(clientFullDTO); // Corregir, no está guardando la FK en el registro de la dirección
+        ClientEntity clientEntity = clientMapper.fullDtoToEntity(clientFullDTO);
         clientEntity.setIsActive(true);
 
         clientRepository.save(clientEntity);
@@ -59,7 +53,7 @@ public class ClientServiceImpl implements IClientService {
     }
 
     @Override
-    public ClientFullPagesResponseDTO findAllClients(Integer page, Integer size) throws GenericAccessException {
+    public ClientFullPagesResponseDTO findAllClients(Integer page, Integer size) throws RepositoryAccessException {
 
         ClientFullPagesResponseDTO clientFullPagesResponseDTO;
         Pageable pageable = PageRequest.of(page, size);
@@ -74,13 +68,13 @@ public class ClientServiceImpl implements IClientService {
             clientFullPagesResponseDTO.setTotalElements((int) clientEntityPages.getTotalElements());
             return clientFullPagesResponseDTO;
         } else {
-            throw new GenericAccessException(READ_ACCESS_EXCEPTION_NOT_FOUND);
+            throw new RepositoryAccessException(READ_ACCESS_EXCEPTION_NOT_FOUND);
         }
 
     }
 
     @Override
-    public ClientFullResponseDTO findClientById(Long idClient) throws GenericAccessException {
+    public ClientFullResponseDTO findClientById(Long idClient) throws RepositoryAccessException {
 
         utils.verifyClientId(idClient);
 
@@ -91,7 +85,7 @@ public class ClientServiceImpl implements IClientService {
     }
 
     @Override
-    public ClientInvoicesResponseDTO findClientInvoices(Long idClient) throws GenericAccessException {
+    public ClientInvoicesResponseDTO findClientInvoices(Long idClient) throws RepositoryAccessException {
 
         utils.verifyClientId(idClient);
 
@@ -111,7 +105,7 @@ public class ClientServiceImpl implements IClientService {
     }
 
     @Override
-    public ClientOnlyResponseDTO modifyClient(Long idClient, ClientOnlyDTO clientOnlyDTO) throws GenericAccessException {
+    public ClientOnlyResponseDTO modifyClient(Long idClient, ClientOnlyDTO clientOnlyDTO) throws RepositoryAccessException {
 
         utils.verifyClientId(idClient);
         utils.verifyClientDni(clientOnlyDTO.getDni());
@@ -129,7 +123,7 @@ public class ClientServiceImpl implements IClientService {
     }
 
     @Override
-    public ClientFullResponseDTO removeClient(Long idClient) throws GenericAccessException {
+    public ClientFullResponseDTO removeClient(Long idClient) throws RepositoryAccessException {
 
         utils.verifyClientId(idClient);
 

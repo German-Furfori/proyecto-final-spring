@@ -6,20 +6,18 @@ import com.ayi.spring.rest.serv.app.dto.response.client.ClientFullPagesResponseD
 import com.ayi.spring.rest.serv.app.dto.response.client.ClientInvoicesResponseDTO;
 import com.ayi.spring.rest.serv.app.dto.response.client.ClientFullResponseDTO;
 import com.ayi.spring.rest.serv.app.dto.response.client.ClientOnlyResponseDTO;
-import com.ayi.spring.rest.serv.app.exceptions.GenericAccessException;
-
-import java.util.List;
+import com.ayi.spring.rest.serv.app.exceptions.RepositoryAccessException;
 
 public interface IClientService {
-    ClientFullResponseDTO addClient(ClientFullDTO clientFullDTO) throws GenericAccessException;
+    ClientFullResponseDTO addClient(ClientFullDTO clientFullDTO) throws RepositoryAccessException;
 
-    ClientFullPagesResponseDTO findAllClients(Integer page, Integer size) throws GenericAccessException;
+    ClientFullPagesResponseDTO findAllClients(Integer page, Integer size) throws RepositoryAccessException;
 
-    ClientFullResponseDTO findClientById(Long idClient) throws GenericAccessException;
+    ClientFullResponseDTO findClientById(Long idClient) throws RepositoryAccessException;
 
-    ClientInvoicesResponseDTO findClientInvoices(Long idClient) throws GenericAccessException;
+    ClientInvoicesResponseDTO findClientInvoices(Long idClient) throws RepositoryAccessException;
 
-    ClientOnlyResponseDTO modifyClient(Long id, ClientOnlyDTO clientOnlyDTO) throws GenericAccessException;
+    ClientOnlyResponseDTO modifyClient(Long id, ClientOnlyDTO clientOnlyDTO) throws RepositoryAccessException;
 
-    ClientFullResponseDTO removeClient(Long id) throws GenericAccessException;
+    ClientFullResponseDTO removeClient(Long id) throws RepositoryAccessException;
 }

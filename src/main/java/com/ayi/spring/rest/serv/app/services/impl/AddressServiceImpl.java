@@ -5,7 +5,7 @@ import com.ayi.spring.rest.serv.app.dto.response.address.AddressPagesResponseDTO
 import com.ayi.spring.rest.serv.app.dto.response.address.AddressResponseDTO;
 import com.ayi.spring.rest.serv.app.entities.AddressEntity;
 import com.ayi.spring.rest.serv.app.entities.ClientEntity;
-import com.ayi.spring.rest.serv.app.exceptions.GenericAccessException;
+import com.ayi.spring.rest.serv.app.exceptions.RepositoryAccessException;
 import com.ayi.spring.rest.serv.app.mappers.IAddressMapper;
 import com.ayi.spring.rest.serv.app.repositories.IAddressRepository;
 import com.ayi.spring.rest.serv.app.repositories.IClientRepository;
@@ -40,7 +40,7 @@ public class AddressServiceImpl implements IAddressService {
     Utils utils;
 
     @Override
-    public AddressResponseDTO addAddress(Long idClient, AddressDTO addressDTO) throws GenericAccessException {
+    public AddressResponseDTO addAddress(Long idClient, AddressDTO addressDTO) throws RepositoryAccessException {
 
         utils.verifyClientId(idClient);
 
@@ -55,7 +55,7 @@ public class AddressServiceImpl implements IAddressService {
     }
 
     @Override
-    public AddressPagesResponseDTO findAllAddressPages(Integer page, Integer size) throws GenericAccessException {
+    public AddressPagesResponseDTO findAllAddressPages(Integer page, Integer size) throws RepositoryAccessException {
 
         AddressPagesResponseDTO addressPagesResponseDTO;
         Pageable pageable = PageRequest.of(page, size);
@@ -70,13 +70,13 @@ public class AddressServiceImpl implements IAddressService {
             addressPagesResponseDTO.setTotalElements((int) addressEntityPages.getTotalElements());
             return addressPagesResponseDTO;
         } else {
-            throw new GenericAccessException(READ_ACCESS_EXCEPTION_NOT_FOUND);
+            throw new RepositoryAccessException(READ_ACCESS_EXCEPTION_NOT_FOUND);
         }
 
     }
 
     @Override
-    public AddressResponseDTO findAddressById(Long idAddress) throws GenericAccessException {
+    public AddressResponseDTO findAddressById(Long idAddress) throws RepositoryAccessException {
 
         utils.verifyAddressId(idAddress);
 
@@ -87,7 +87,7 @@ public class AddressServiceImpl implements IAddressService {
     }
 
     @Override
-    public AddressResponseDTO modifyAddress(Long idClient, Long idAddress, AddressDTO addressDTO) throws GenericAccessException {
+    public AddressResponseDTO modifyAddress(Long idClient, Long idAddress, AddressDTO addressDTO) throws RepositoryAccessException {
 
         utils.verifyClientId(idClient);
         utils.verifyClientAddressId(idClient, idAddress);
@@ -101,7 +101,7 @@ public class AddressServiceImpl implements IAddressService {
     }
 
     @Override
-    public AddressResponseDTO removeAddress(Long idClient, Long idAddress) throws GenericAccessException {
+    public AddressResponseDTO removeAddress(Long idClient, Long idAddress) throws RepositoryAccessException {
 
         utils.verifyClientId(idClient);
         utils.verifyClientAddressId(idClient, idAddress);

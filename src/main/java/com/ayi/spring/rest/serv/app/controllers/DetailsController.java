@@ -3,7 +3,7 @@ package com.ayi.spring.rest.serv.app.controllers;
 import com.ayi.spring.rest.serv.app.dto.request.details.DetailsDTO;
 import com.ayi.spring.rest.serv.app.dto.response.details.DetailsPagesResponseDTO;
 import com.ayi.spring.rest.serv.app.dto.response.details.DetailsWithClientResponseDTO;
-import com.ayi.spring.rest.serv.app.exceptions.GenericAccessException;
+import com.ayi.spring.rest.serv.app.exceptions.RepositoryAccessException;
 import com.ayi.spring.rest.serv.app.services.IDetailsService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
@@ -17,8 +17,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static com.ayi.spring.rest.serv.app.constants.HashMapStrings.ERROR_CODE;
@@ -63,8 +63,8 @@ public class DetailsController {
 
         try {
             detailsPagesResponseDTO = detailsService.findAllDetailsPages(page, size);
-        } catch (GenericAccessException e) {
-            response.put(ERROR_CODE, 4000);
+        } catch (RepositoryAccessException e) {
+            response.put(ERROR_CODE, HttpStatus.NOT_FOUND.value());
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
@@ -93,7 +93,7 @@ public class DetailsController {
     public ResponseEntity<?> updateDetails(
             @ApiParam(name = "id", required = true, value = "Details Id", example = "1")
             @PathVariable("id") Long id,
-            @RequestBody DetailsDTO detailsDTO) {
+            @Valid @RequestBody DetailsDTO detailsDTO) {
 
         Map<String, Object> response = new HashMap<>();
 
@@ -101,8 +101,8 @@ public class DetailsController {
 
         try {
             detailsWithClientResponseDTO = detailsService.modifyDetails(id, detailsDTO);
-        } catch (GenericAccessException e) {
-            response.put(ERROR_CODE, 2003);
+        } catch (RepositoryAccessException e) {
+            response.put(ERROR_CODE, HttpStatus.NOT_FOUND.value());
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }

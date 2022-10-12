@@ -3,7 +3,7 @@ package com.ayi.spring.rest.serv.app.controllers;
 import com.ayi.spring.rest.serv.app.dto.request.address.AddressDTO;
 import com.ayi.spring.rest.serv.app.dto.response.address.AddressPagesResponseDTO;
 import com.ayi.spring.rest.serv.app.dto.response.address.AddressResponseDTO;
-import com.ayi.spring.rest.serv.app.exceptions.GenericAccessException;
+import com.ayi.spring.rest.serv.app.exceptions.RepositoryAccessException;
 import com.ayi.spring.rest.serv.app.services.IAddressService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
@@ -17,8 +17,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static com.ayi.spring.rest.serv.app.constants.HashMapStrings.ERROR_CODE;
@@ -52,7 +52,7 @@ public class AddressController {
     public ResponseEntity<?> createAddress(
             @ApiParam(name = "id", required = true, value = "Client Id", example = "1")
             @PathVariable("id") Long id,
-            @RequestBody AddressDTO addressDTO) {
+            @Valid @RequestBody AddressDTO addressDTO) {
 
         Map<String, Object> response = new HashMap<>();
 
@@ -60,8 +60,8 @@ public class AddressController {
 
         try {
             addressResponseDTO = addressService.addAddress(id, addressDTO);
-        } catch (GenericAccessException e) {
-            response.put(ERROR_CODE, 3000);
+        } catch (RepositoryAccessException e) {
+            response.put(ERROR_CODE, HttpStatus.NOT_ACCEPTABLE.value());
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
         }
@@ -99,8 +99,8 @@ public class AddressController {
 
         try {
             addressPagesResponseDTO = addressService.findAllAddressPages(page - 1, size);
-        } catch (GenericAccessException e) {
-            response.put(ERROR_CODE, 3001);
+        } catch (RepositoryAccessException e) {
+            response.put(ERROR_CODE, HttpStatus.NOT_FOUND.value());
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
@@ -136,8 +136,8 @@ public class AddressController {
 
         try {
             addressResponseDTO = addressService.findAddressById(id);
-        } catch (GenericAccessException e) {
-            response.put(ERROR_CODE, 3002);
+        } catch (RepositoryAccessException e) {
+            response.put(ERROR_CODE, HttpStatus.NOT_FOUND.value());
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
@@ -168,7 +168,7 @@ public class AddressController {
             @PathVariable("idClient") Long idClient,
             @ApiParam(name = "idAddress", required = true, value = "Address Id", example = "1")
             @PathVariable("idAddress") Long idAddress,
-            @RequestBody AddressDTO addressDTO) {
+            @Valid @RequestBody AddressDTO addressDTO) {
 
         Map<String, Object> response = new HashMap<>();
 
@@ -176,8 +176,8 @@ public class AddressController {
 
         try {
             addressResponseDTO = addressService.modifyAddress(idClient, idAddress, addressDTO);
-        } catch (GenericAccessException e) {
-            response.put(ERROR_CODE, 3004);
+        } catch (RepositoryAccessException e) {
+            response.put(ERROR_CODE, HttpStatus.NOT_FOUND.value());
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
@@ -215,8 +215,8 @@ public class AddressController {
 
         try {
             addressResponseDTO = addressService.removeAddress(idClient, idAddress);
-        } catch (GenericAccessException e) {
-            response.put(ERROR_CODE, 3004);
+        } catch (RepositoryAccessException e) {
+            response.put(ERROR_CODE, HttpStatus.NOT_FOUND.value());
             response.put(ERROR_MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
